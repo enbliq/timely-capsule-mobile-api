@@ -6,6 +6,8 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import jwtConfig from './config/jwt.config';
 import { GenerateTokensProvider } from './provider/generate-token.provider';
+import { BcryptProvider } from './provider/bcrpt.provider';
+import { HashingProvider } from './provider/hashing.provider';
 
 @Module({
   imports: [
@@ -13,8 +15,13 @@ import { GenerateTokensProvider } from './provider/generate-token.provider';
     JwtModule.register({}),
   ],
   controllers: [AuthController],
-  providers: [AuthService, GenerateTokensProvider],
+  providers: [
+    AuthService,
+    GenerateTokensProvider,
+    {
+      provide: HashingProvider,
+      useClass: BcryptProvider,
+    },
+  ],
 })
-
-
 export class AuthModule {}

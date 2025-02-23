@@ -5,13 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-} from 'typeorm'; 
-import { Capsule } from 'src/capsule/entities/capsule.entity'; 
-import { Transaction } from 'src/transaction/entities/transaction.entity'; 
+} from 'typeorm';
+import { Capsule } from 'src/capsule/entities/capsule.entity';
+import { Transaction } from 'src/transaction/entities/transaction.entity';
 
-@Entity() 
+@Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid') 
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
@@ -23,7 +23,7 @@ export class User {
   })
   email: string;
 
-  @Column() 
+  @Column()
   passwordHash: string;
 
   @Column({
