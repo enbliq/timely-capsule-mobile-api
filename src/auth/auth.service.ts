@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { UserService } from 'src/user/user.service';
+import { HashProvider } from 'src/app.service';
 
 @Injectable()
 export class AuthService {
+  constructor(
+    @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
+    private readonly hashProvider: HashProvider,
+  ) {}
   create(createAuthDto: CreateAuthDto) {
     return 'This action adds a new auth';
   }
