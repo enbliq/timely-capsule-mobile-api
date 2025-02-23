@@ -6,20 +6,20 @@ import {
   CreateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { User } from 'src/user/entities/user.entity'; 
-import { GuestCapsuleAccessLog } from 'src/guest/entities/guest.entity'; 
-import { Transaction } from 'src/transaction/entities/transaction.entity'; 
+import { User } from 'src/user/entities/user.entity';
+import { GuestCapsuleAccessLog } from 'src/guest/entities/guest.entity';
+import { Transaction } from 'src/transaction/entities/transaction.entity';
 
-@Entity() 
+@Entity()
 export class Capsule {
-  @PrimaryGeneratedColumn('uuid') 
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column() 
+  @Column()
   title: string;
 
   @Column({
-    type: 'text', 
+    type: 'text',
   })
   content: string;
 
@@ -28,10 +28,10 @@ export class Capsule {
   })
   media: string;
 
-  @Column() 
+  @Column()
   password: string;
 
-  @Column() 
+  @Column()
   recipientEmail: string;
 
   @Column({
@@ -39,10 +39,10 @@ export class Capsule {
   })
   recipientLink: string;
 
-  @Column() 
+  @Column()
   unlockAt: Date;
 
-  @Column() 
+  @Column()
   expiresAt: Date;
 
   @Column({
@@ -63,17 +63,18 @@ export class Capsule {
   @CreateDateColumn() // auto set value to the current date and time upon creation
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.capsules, { //many capsule should have  relation to one USER 
-    nullable: false, // restrict null values for the createdBy 
+  @ManyToOne(() => User, (user) => user.capsules, {
+    //many capsule should have  relation to one USER
+    nullable: false, // restrict null values for the createdBy
     onDelete: 'CASCADE', // auto delete Capsule if the related User is deleted
   })
   createdBy: User;
 
-// a CAPSULE should have a  one-to-many relationship with the GuestCapsuleAccessLog entity
-  @OneToMany(() => GuestCapsuleAccessLog, (log) => log.capsule) 
+  // a CAPSULE should have a  one-to-many relationship with the GuestCapsuleAccessLog entity
+  @OneToMany(() => GuestCapsuleAccessLog, (log) => log.capsule)
   accessLogs: GuestCapsuleAccessLog[];
 
-// a CAPSULE should have a one-to-many relationship with the Transaction entity
-  @OneToMany(() => Transaction, (transaction) => transaction.capsule) 
+  // a CAPSULE should have a one-to-many relationship with the Transaction entity
+  @OneToMany(() => Transaction, (transaction) => transaction.capsule)
   transactions: Transaction[];
 }
