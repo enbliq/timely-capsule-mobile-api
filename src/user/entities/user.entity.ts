@@ -53,9 +53,9 @@ export class User {
   @UpdateDateColumn() // this auto updates date & time upon logIn of a user
   lastLogin: Date;
 
-  @OneToMany(() => Capsule, (capsule) => capsule.createdBy) // a USER  should have a one-to-many relationship with the Capsule entity
-  capsules: Capsule[];
-
   @OneToMany(() => Transaction, (transaction) => transaction.user) // a USER should also have a one-to-many relationship with the Transaction entity
   transactions: Transaction[];
+  
+  @OneToMany(() => Capsule, (capsule) => capsule.createdBy) // a USER  should have a one-to-many relationship with the Capsule entity
+  capsules: Capsule[];
 }
