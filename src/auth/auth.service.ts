@@ -4,15 +4,11 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigType } from '@nestjs/config';
 import jwtConfig from './config/jwt.config';
-import { GenerateTokensProvider } from './provider/generate-token.provider';
 
 @Injectable()
 export class AuthService {
 
   constructor(
-    private readonly jwtService: JwtService,
-
-    private readonly tokenService: GenerateTokensProvider,
 
     @Inject(jwtConfig.KEY) // Inject jwtConfig directly
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
