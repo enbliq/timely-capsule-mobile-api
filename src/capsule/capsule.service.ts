@@ -1,9 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCapsuleDto } from './dto/create-capsule.dto';
 import { UpdateCapsuleDto } from './dto/update-capsule.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Capsule } from './entities/capsule.entity';
+import { Repository } from 'typeorm';
+
 
 @Injectable()
 export class CapsuleService {
+  constructor(
+    @InjectRepository(Capsule) private readonly capsuleRepository: Repository<Capsule>,
+  ) {}
   create(createCapsuleDto: CreateCapsuleDto) {
     return 'This action adds a new capsule';
   }
