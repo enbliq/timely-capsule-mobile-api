@@ -1,39 +1,29 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Matches,
-  MaxLength,
-} from 'class-validator';
-import { Column } from 'typeorm';
-import { Exclude } from 'class-transformer';
+import { IsString, IsEmail, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
-  @IsNotEmpty()
-  @MaxLength(90)
-  firstname: string;
-
-  @IsString()
-  @IsOptional()
-  @MaxLength(90)
-  lastname: string;
+  name: string;
 
   @IsEmail()
-  @MaxLength(150)
-  @Column({ unique: true, length: 150 })
   email: string;
 
-  @Exclude()
+  // Accept a plain password that will later be hashed
   @IsString()
-  @MaxLength(225)
-  @Matches(
-    /^(?=.*[!@#$%^&])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
-    {
-      message:
-        'Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.',
-    },
-  )
   password: string;
+
+  @IsOptional()
+  @IsString()
+  profilePicture?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isGuest?: boolean;
+
+  @IsOptional()
+  @IsString()
+  subscriptionTier?: string;
+
+  @IsOptional()
+  @IsString()
+  walletAddress?: string;
 }

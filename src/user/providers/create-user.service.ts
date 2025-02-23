@@ -42,7 +42,7 @@ export class CreateUserService {
 
         const newUser = this.userRepository.create({
             ...createUserDto,
-            password: hashedPassword,
+            passwordHash: hashedPassword,
         });
 
         try {
