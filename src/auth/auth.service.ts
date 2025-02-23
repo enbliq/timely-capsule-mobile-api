@@ -1,15 +1,21 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { UserService } from 'src/user/user.service';
+import { ConfigType } from '@nestjs/config';
+import jwtConfig from './config/jwt.config';
 import { HashProvider } from 'src/app.service';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
     private readonly hashProvider: HashProvider,
+    @Inject(jwtConfig.KEY) // Inject jwtConfig directly
+    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
+
+
   create(createAuthDto: CreateAuthDto) {
     return 'This action adds a new auth';
   }
