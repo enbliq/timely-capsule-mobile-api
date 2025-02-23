@@ -14,10 +14,10 @@ import { RefreshTokenProvider } from './provider/refreshToken.provider';
 @Module({
   imports: [
     ConfigModule.forFeature(jwtConfig), // Loads JWT configuration
-    JwtModule.register({}),
+    // JwtModule.register({}),
+    JwtModule.registerAsync(jwtConfig.asProvider()),
     forwardRef(() => UserModule),
   ],
-  exports: [AuthService],
   controllers: [AuthController],
   providers: [
     AuthService,
@@ -28,5 +28,6 @@ import { RefreshTokenProvider } from './provider/refreshToken.provider';
     },
     RefreshTokenProvider,
   ],
+  exports: [AuthService, HashingProvider],
 })
 export class AuthModule {}
