@@ -6,5 +6,6 @@ import { SignInService } from './sign-in.service';
 @Module({
   controllers: [AuthController],
   providers: [AuthService, SignInService],
+  exports: [SignInService]
 })
 export class AuthModule {}
