@@ -2,8 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConfig } from 'src/config/jwt.config';
 import { ConfigType } from '@nestjs/config';
+import jwtConfig from './config/jwt.config';
+import { GenerateTokensProvider } from './provider/generate-token.provider';
 
 @Injectable()
 export class AuthService {
@@ -11,18 +12,11 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
 
+    private readonly tokenService: GenerateTokensProvider,
+
     @Inject(jwtConfig.KEY) // Inject jwtConfig directly
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) {}
-
-  generateAccessToken(payload: object): string {
-    return this.jwtService.sign(payload, {
-      secret: this.jwtConfiguration.secret,
-      expiresIn: this.jwtConfiguration.signOptions.expiresIn,
-      audience: this.jwtConfiguration.signOptions.audience,
-      issuer: this.jwtConfiguration.signOptions.issuer,
-    });
-  }
 
 
   create(createAuthDto: CreateAuthDto) {

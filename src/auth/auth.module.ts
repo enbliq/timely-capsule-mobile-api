@@ -4,16 +4,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { jwtConfig } from 'src/config/jwt.config';
+import jwtConfig from './config/jwt.config';
+import { GenerateTokensProvider } from './provider/generate-token.provider';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    ConfigModule.forFeature(jwtConfig),
-    JwtModule.registerAsync(jwtConfig.asProvider()), 
+    ConfigModule.forFeature(jwtConfig), // Loads JWT configuration
+    JwtModule.register({}),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, GenerateTokensProvider],
 })
 
 
