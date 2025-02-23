@@ -12,7 +12,7 @@ import { Transaction } from 'src/transaction/entities/transaction.entity';
 @Entity() 
 export class User {
   @PrimaryGeneratedColumn('uuid') 
-  id: string;
+  id: number;
 
   @Column()
   name: string;
