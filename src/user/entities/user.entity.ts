@@ -5,13 +5,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
-} from 'typeorm'; 
-import { Capsule } from 'src/capsule/entities/capsule.entity'; 
-import { Transaction } from 'src/transaction/entities/transaction.entity'; 
+} from 'typeorm';
+import { Capsule } from 'src/capsule/entities/capsule.entity';
+import { Transaction } from 'src/transaction/entities/transaction.entity';
 
-@Entity() 
+@Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid') 
+  @PrimaryGeneratedColumn('uuid')
   id: number;
 
   @Column()
@@ -23,7 +23,7 @@ export class User {
   })
   email: string;
 
-  @Column() 
+  @Column()
   passwordHash: string;
 
   @Column({
@@ -53,9 +53,9 @@ export class User {
   @UpdateDateColumn() // this auto updates date & time upon logIn of a user
   lastLogin: Date;
 
-  @OneToMany(() => Capsule, (capsule) => capsule.createdBy) // a USER  should have a one-to-many relationship with the Capsule entity
-  capsules: Capsule[];
-
   @OneToMany(() => Transaction, (transaction) => transaction.user) // a USER should also have a one-to-many relationship with the Transaction entity
   transactions: Transaction[];
+
+  @OneToMany(() => Capsule, (capsule) => capsule.createdBy) // a USER  should have a one-to-many relationship with the Capsule entity
+  capsules: Capsule[];
 }
