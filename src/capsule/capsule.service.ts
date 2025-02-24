@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCapsuleDto } from './dto/create-capsule.dto';
 import { UpdateCapsuleDto } from './dto/update-capsule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -19,15 +19,21 @@ export class CapsuleService {
     return `This action returns all capsule`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} capsule`;
+  async findOneById(id: string): Promise<Capsule | null> {
+    return this.capsuleRepository.findOne({ where: { id } });
   }
 
   update(id: number, updateCapsuleDto: UpdateCapsuleDto) {
     return `This action updates a #${id} capsule`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} capsule`;
+  async deleteCapsule(id: string) {
+    const capsule = await this.findOneById(id);
+
+    if (!capsule) {
+      throw new NotFoundException('Capsule not found');
+    }
+    await this.capsuleRepository.softDelete(id); // Use remove(id) for permanent deletion
+    return { message: 'Capsule deleted successfully' };
   }
 }
