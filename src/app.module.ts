@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { GuestModule } from './guest/guest.module';
 import { CapsuleModule } from './capsule/capsule.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { CapsuleModule } from './capsule/capsule.module';
     TransactionModule,
     GuestModule,
     CapsuleModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],
