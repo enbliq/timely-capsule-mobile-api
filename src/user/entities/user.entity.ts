@@ -11,7 +11,7 @@ import { Transaction } from 'src/transaction/entities/transaction.entity';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
@@ -24,7 +24,7 @@ export class User {
   email: string;
 
   @Column()
-  passwordHash: string;
+  password: string;
 
   @Column({
     nullable: true, // this allows null values for profilePicture
