@@ -4,33 +4,27 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { PaginatedInterface } from 'src/common/pagination/interface/paginationInterface';
-import { PaginationProvider } from 'src/common/pagination/provider/pagination.provider';
-import { PaginationQueryDto } from 'src/common/pagination/dto/paginationQuery.dto';
-
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-
-    private readonly paginationProvider: PaginationProvider,
   ) {}
   create(createUserDto: CreateUserDto) {
     return 'This action adds a new user';
   }
 
-  public findAllUsers(
-    paginationQueryDto: PaginationQueryDto,
-  ): Promise<PaginatedInterface<User>> {
-    try {
-      return this.paginationProvider.PaginatedQuery(
-        paginationQueryDto,
-        this.userRepository,
-      );
-    } catch (error) {
-      throw new RequestTimeoutException(error, 'Unable To Fetch User(s)');
-    }
+  public async findAllUsers(page: number, limit: number) {
+    const [users, total] = await this.userRepository.findAndCount({
+      skip: (page - 1) * limit,
+      take: limit,
+      order: { id: 'ASC' },
+    });
+    console.log(limit, page);
+    return {
+      total,
+      data: users,
+    };
   }
 
   // Finding a Single User By Registered ID

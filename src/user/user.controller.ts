@@ -13,7 +13,6 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PaginationQueryDto } from 'src/common/pagination/dto/paginationQuery.dto';
 
 @Controller('user')
 export class UserController {
@@ -25,8 +24,11 @@ export class UserController {
   }
 
   @Get()
-  findAll(@Query() PaginationQueryDto: PaginationQueryDto) {
-    return this.userService.findAllUsers(PaginationQueryDto);
+  findAll(
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  ) {
+    return this.userService.findAllUsers(page, limit);
   }
 
   @Get(':id')
