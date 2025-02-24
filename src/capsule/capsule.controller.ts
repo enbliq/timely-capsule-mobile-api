@@ -24,13 +24,12 @@ export class CapsuleController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCapsuleDto: UpdateCapsuleDto) {
-    return this.capsuleService.update(+id, updateCapsuleDto);
+  update(@Param('id') id: string, @Body() updateCapsuleDto: CreateCapsuleDto) {
+      return this.capsuleService.update(id, updateCapsuleDto);
   }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.capsuleService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.capsuleService.remove(+id);
+  // }
 }
 
