@@ -40,7 +40,7 @@ export class RefreshTokenProvider {
       );
 
       // Grab the user from the database based on the user ID (sub)
-      const user = await this.userServices.findOneByEmail(sub);
+      const user = await this.userServices.findOneById(sub);
 
       // Generate a new access token
       const access_token = await this.generateTokensProvider.SignToken(
@@ -54,7 +54,7 @@ export class RefreshTokenProvider {
     } catch (error) {
       // If the refresh token is expired, generate a new refresh token
       if (error.name === 'TokenExpiredError') {
-        const user = await this.userServices.findOneByEmail(
+        const user = await this.userServices.findOneById(
           this.jwtService.decode(refreshTokenDto.refreshToken)['sub'],
         );
 
