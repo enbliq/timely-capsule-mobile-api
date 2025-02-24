@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGuestDto } from './dto/create-guest.dto';
+import { CreateGuestCapsuleAccessLogDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
 
 @Injectable()
 export class GuestService {
-  create(createGuestDto: CreateGuestDto) {
+  create(createGuestDto: CreateGuestCapsuleAccessLogDto) {
     return 'This action adds a new guest';
   }
 
