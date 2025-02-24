@@ -4,15 +4,15 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
-} from 'typeorm'; 
-import { Capsule } from 'src/capsule/entities/capsule.entity'; 
+} from 'typeorm';
+import { Capsule } from 'src/capsule/entities/capsule.entity';
 
-@Entity() 
+@Entity()
 export class GuestCapsuleAccessLog {
-  @PrimaryGeneratedColumn('uuid') 
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column() 
+  @Column()
   guestIdentifier: string;
 
   @CreateDateColumn() // auto set the  value to the current date and time upon entry

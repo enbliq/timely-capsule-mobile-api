@@ -3,12 +3,15 @@ import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { SignInDto } from "./dto/sign-in.dto"
+import { SignInService } from "./sign-in.service"
 
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly signInService: SignInService,
+
   ) {}
 
   @Post()
@@ -35,6 +38,10 @@ export class AuthController {
   remove(@Param('id') id: string) {
     return this.authService.remove(+id);
   }
+   @Post('sign-in')
+    async signIn(@Body() signInDto: SignInDto) {
+      return this.signInService.signIn(signInDto);
+    }
 
 }
 
