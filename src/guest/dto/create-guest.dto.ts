@@ -4,7 +4,7 @@ import {
     IsDate 
   } from 'class-validator';
   
-  export class CreateGuestDto {
+  export class CreateGuestCapsuleAccessLogDto {
     @IsString()
     guestIdentifier: string;
   
