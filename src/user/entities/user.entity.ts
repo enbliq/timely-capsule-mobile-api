@@ -24,7 +24,7 @@ export class User {
   email: string;
 
   @Column()
-  passwordHash: string;
+  password: string;
 
   @Column({
     nullable: true, // this allows null values for profilePicture

@@ -1,6 +1,6 @@
 import { IsString, IsUUID, IsDate } from 'class-validator';
 
-export class CreateGuestCapsuleAccessLogDto {
+export class GuestCapsuleAccessLogDto {
   @IsString()
   guestIdentifier: string;
 

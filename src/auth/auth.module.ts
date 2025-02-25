@@ -14,10 +14,9 @@ import { SignInService } from './sign-in.service';
 
 @Module({
   imports: [
-    ConfigModule.forFeature(jwtConfig), // Loads JWT configuration
-    // JwtModule.register({}),
-    JwtModule.registerAsync(jwtConfig.asProvider()),
     forwardRef(() => UserModule),
+    ConfigModule.forFeature(jwtConfig), // Loads JWT configuration
+    JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [AuthController],
   providers: [
@@ -29,6 +28,7 @@ import { SignInService } from './sign-in.service';
       useClass: BcryptProvider,
     },
     RefreshTokenProvider,
+    SignInService,
   ],
   exports: [AuthService, SignInService, HashingProvider],
 })
