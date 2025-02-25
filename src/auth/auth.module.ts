@@ -10,6 +10,7 @@ import { BcryptProvider } from './provider/bcrpt.provider';
 import { HashingProvider } from './provider/hashing.provider';
 import { UserModule } from 'src/user/user.module';
 // import { RefreshTokenProvider } from './provider/refreshToken.provider';
+import { SignInService } from './sign-in.service';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UserModule } from 'src/user/user.module';
   controllers: [AuthController],
   providers: [
     AuthService,
+    SignInService,
     GenerateTokensProvider,
     {
       provide: HashingProvider,
@@ -28,6 +30,6 @@ import { UserModule } from 'src/user/user.module';
     },
     // RefreshTokenProvider,
   ],
-  exports: [AuthService, HashingProvider],
+  exports: [AuthService, SignInService, HashingProvider],
 })
 export class AuthModule {}

@@ -3,6 +3,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CapsuleService } from './capsule.service';
 import { CreateCapsuleDto } from './dto/create-capsule.dto';
 import { UpdateCapsuleDto } from './dto/update-capsule.dto';
+import { NotFoundException, } from '@nestjs/common';
 
 @Controller('capsule')
 export class CapsuleController {
@@ -19,17 +20,22 @@ export class CapsuleController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.capsuleService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    const capsule = await this.capsuleService.findOneById(id);
+    if (!capsule) {
+      throw new NotFoundException('Capsule not found');
+    }
+    return capsule; 
   }
 
-  @Patch(':id')
+@Patch(':id')
   update(@Param('id') id: string, @Body() updateCapsuleDto: CreateCapsuleDto) {
       return this.capsuleService.update(id, updateCapsuleDto);
   }
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.capsuleService.remove(+id);
-  // }
+  
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+   return await this.capsuleService.deleteCapsule(id)
+  }
 }
 

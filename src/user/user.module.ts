@@ -13,5 +13,5 @@ import { CreatUserService } from './providers/creat-user.service';
   ],
   providers: [UserService, CreatUserService],
   controllers: [UserController],
-  exports: [UserService],})
+  exports: [UserService, TypeOrmModule.forFeature([User])], })
 export class UserModule {}

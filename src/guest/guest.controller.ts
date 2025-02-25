@@ -1,16 +1,24 @@
-// import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-// import { GuestService } from './guest.service';
-// // import { CreateGuestDto } from './dto/create-guest.dto';
-// // import { UpdateGuestDto } from './dto/update-guest.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { GuestService } from './guest.service';
+import { CreateGuestCapsuleAccessLogDto } from './dto/create-guest.dto';
+import { UpdateGuestDto } from './dto/update-guest.dto';
 
 // @Controller('guest')
 // export class GuestController {
 //   constructor(private readonly guestService: GuestService) {}
 
-//   @Post()
-//   // create(@Body() createGuestDto: CreateGuestDto) {
-//   //   return this.guestService.create(createGuestDto);
-//   // }
+  // @Post()
+  // create(@Body() createGuestDto: CreateGuestCapsuleAccessLogDto) {
+  //   return this.guestService.create(createGuestDto);
+  // }
 
 //   @Get()
 //   findAll() {

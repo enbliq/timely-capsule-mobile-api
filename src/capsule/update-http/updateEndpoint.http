@@ -1,4 +1,6 @@
-PATCH http://localhost:3000/capsule/7
+
+
+PATCH http://localhost:3000/capsule
 Content-Type: application/json
 {
     "title": "Updated Title",
