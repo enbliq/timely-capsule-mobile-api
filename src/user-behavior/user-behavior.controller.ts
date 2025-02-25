@@ -3,8 +3,8 @@ import {
   Get,
   Query,
   Res,
-  UseGuards,
   UseInterceptors,
+  Param,
 } from '@nestjs/common';
 import type { UserBehaviorService } from './user-behavior.service';
 import type { Response } from 'express';
@@ -13,6 +13,7 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
+  ApiParam,
 } from '@nestjs/swagger';
 import type { UserBehaviorQueryDto } from './dtos/user-behavior-query.dto';
 
@@ -85,5 +86,58 @@ export class UserBehaviorController {
   @ApiResponse({ status: 200, description: 'Returns the user retention rate' })
   async getUserRetentionRate(@Query('days') days: number) {
     return this.userBehaviorService.getUserRetentionRate(days);
+  }
+
+  @Get('user-activity-summary/:userId')
+  @ApiOperation({ summary: 'Get user activity summary' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the user activity summary',
+  })
+  @ApiParam({ name: 'userId', type: 'number' })
+  async getUserActivitySummary(
+    @Param('userId') userId: number,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ) {
+    return this.userBehaviorService.getUserActivitySummary(
+      userId,
+      startDate,
+      endDate,
+    );
+  }
+
+  @Get('content-popularity-trend/:contentId')
+  @ApiOperation({ summary: 'Get content popularity trend' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the content popularity trend',
+  })
+  @ApiParam({ name: 'contentId', type: 'string' })
+  async getContentPopularityTrend(
+    @Param('contentId') contentId: string,
+    @Query('days') days: number,
+  ) {
+    return this.userBehaviorService.getContentPopularityTrend(contentId, days);
+  }
+
+  @Get('user-segmentation')
+  @ApiOperation({ summary: 'Get user segmentation' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the user segmentation data',
+  })
+  async getUserSegmentation() {
+    return this.userBehaviorService.getUserSegmentation();
+  }
+
+  @Get('session-duration-distribution')
+  @ApiOperation({ summary: 'Get session duration distribution' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the session duration distribution',
+  })
+  async getSessionDurationDistribution() {
+    return this.userBehaviorService.getSessionDurationDistribution();
   }
 }
