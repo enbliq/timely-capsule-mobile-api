@@ -1,9 +1,7 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import databaseConfig, { validateConfig } from '../config/database.config';
 import appConfig from '../config/config';
-import * as crypto from 'crypto';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
@@ -13,6 +11,8 @@ import { GuestModule } from './guest/guest.module';
 import { CapsuleModule } from './capsule/capsule.module';
 import { PaginationModule } from './common/pagination/pagination.module';
 import { AdminModule } from './admin/admin.module';
+import { ActivityLogModule } from './activity-log/activity-log.module';
+import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/activity-logger.middleware';
 import { MetricsModule } from './metrics/metrics.module';
 
 (global as any).crypto = crypto;
@@ -22,14 +22,24 @@ import { MetricsModule } from './metrics/metrics.module';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [`.env.${process.env.NODE_ENV || 'development'}`],
-      load: [databaseConfig, appConfig],
-      validate: validateConfig,
+      load: [appConfig],
     }),
-    TypeOrmModule.forRootAsync({
-      useFactory: (configService: ConfigService) => ({
-        ...configService.get('database'),
-      }),
-      inject: [ConfigService],
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: process.env.DB_URL,
+      synchronize: true,
+      autoLoadEntities: true,
+      // useFactory: (configService: ConfigService) => ({
+      //   type: 'postgres', // Add this line
+      //   // host: configService.get('DB_HOST'),
+      //   // port: configService.get('DB_PORT'),
+      //   // username: configService.get('DB_USER'),
+      //   // password: configService.get('DB_PASSWORD'),
+      //   // database: configService.get('DB_NAME'),
+      //   url: configService.get('DB_URL'),
+      //   synchronize: true,
+      //   autoLoadEntities: true,
+      // }),
     }),
     UserModule,
     AuthModule,
@@ -38,9 +48,14 @@ import { MetricsModule } from './metrics/metrics.module';
     CapsuleModule,
     PaginationModule,
     AdminModule,
+    ActivityLogModule,
     MetricsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(ActivityLoggerMiddleware).forRoutes('*');
+  }
+}
