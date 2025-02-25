@@ -21,6 +21,7 @@ import { SignInService } from './sign-in.service';
   controllers: [AuthController],
   providers: [
     AuthService,
+    SignInService,
     GenerateTokensProvider,
     {
       provide: HashingProvider,
@@ -29,6 +30,6 @@ import { SignInService } from './sign-in.service';
     RefreshTokenProvider,
     SignInService,
   ],
-  exports: [AuthService, HashingProvider],
+  exports: [AuthService, SignInService, HashingProvider],
 })
 export class AuthModule {}

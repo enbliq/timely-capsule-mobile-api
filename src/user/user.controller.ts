@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  Request,
   DefaultValuePipe,
   ParseIntPipe,
 } from '@nestjs/common';
@@ -38,7 +39,9 @@ export class UserController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    console.log(`Updating user ${id}`);
+    console.log('Update data:', updateUserDto);
+    return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
