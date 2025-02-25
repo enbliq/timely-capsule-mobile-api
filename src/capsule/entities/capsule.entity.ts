@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -18,25 +20,20 @@ export class Capsule {
   @Column()
   title: string;
 
-  @Column({
-    type: 'text',
-  })
+  @Column({ type: 'text' })
   content: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   media: string;
 
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  @Exclude()
+  password?: string;
 
   @Column()
   recipientEmail: string;
 
-  @Column({
-    nullable: true, // Allow null values for recipientLink
-  })
+  @Column({ nullable: true })
   recipientLink: string;
 
   @Column()
@@ -45,36 +42,24 @@ export class Capsule {
   @Column()
   expiresAt: Date;
 
-  @Column({
-    nullable: true, // Allow null values for this column
-  })
+  @Column({ nullable: true })
   fundId: string;
 
-  @Column({
-    default: false, // Set default isClaimed value to false
-  })
+  @Column({ default: false })
   isClaimed: boolean;
 
-  @Column({
-    default: false, // Set default isGuest value to false
-  })
+  @Column({ default: false })
   isGuest: boolean;
 
-  @CreateDateColumn() // auto set value to the current date and time upon creation
+  @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.capsules, {
-    //many capsule should have  relation to one USER
-    nullable: false, // restrict null values for the createdBy
-    onDelete: 'CASCADE', // auto delete Capsule if the related User is deleted
-  })
+  @ManyToOne(() => User, (user) => user.capsules, { nullable: false, onDelete: 'CASCADE' })
   createdBy: User;
 
-  // a CAPSULE should have a  one-to-many relationship with the GuestCapsuleAccessLog entity
   @OneToMany(() => GuestCapsuleAccessLog, (log) => log.capsule)
   accessLogs: GuestCapsuleAccessLog[];
 
-  // a CAPSULE should have a one-to-many relationship with the Transaction entity
   @OneToMany(() => Transaction, (transaction) => transaction.capsule)
   transactions: Transaction[];
 }
