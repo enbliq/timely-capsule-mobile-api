@@ -13,6 +13,7 @@ import { GuestModule } from './guest/guest.module';
 import { CapsuleModule } from './capsule/capsule.module';
 import { PaginationModule } from './common/pagination/pagination.module';
 import { AdminModule } from './admin/admin.module';
+import { MetricsModule } from './metrics/metrics.module';
 
 (global as any).crypto = crypto;
 
@@ -37,6 +38,7 @@ import { AdminModule } from './admin/admin.module';
     CapsuleModule,
     PaginationModule,
     AdminModule,
+    MetricsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
