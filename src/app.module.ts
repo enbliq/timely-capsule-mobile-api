@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import appConfig from '../config/config';
 import { AppController } from './app.controller';
@@ -14,6 +13,8 @@ import { PaginationModule } from './common/pagination/pagination.module';
 import { AdminModule } from './admin/admin.module';
 import { ActivityLogModule } from './activity-log/activity-log.module';
 import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/activity-logger.middleware';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { DataResponseInterceptor } from './common/data-response/data-response-interceptor.interceptor';
 
 @Module({
   imports: [
@@ -49,7 +50,13 @@ import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/ac
     ActivityLogModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DataResponseInterceptor,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
