@@ -1,19 +1,19 @@
 export default () => ({
-  port: parseInt(process.env.PORT) || 3000,
-  /* db: {
+  // port: parseInt(process.env.PORT) || 3000,
+  db: {
     host:
-      process.env.NODE_ENV === 'production' ? process.env.PGHOST : 'localhost',
+      process.env.NODE_ENV === 'production' ? process.env.DB_HOST : 'localhost',
     port: parseInt(
-      process.env.NODE_ENV === 'production' ? process.env.PGPORT : '5433',
+      process.env.NODE_ENV === 'production' ? process.env.DB_PORT : '5433',
     ),
     username:
-      process.env.NODE_ENV === 'production' ? process.env.DBUSER : 'devuser',
+      process.env.NODE_ENV === 'production' ? process.env.DB_USER : 'devuser',
     password:
       process.env.NODE_ENV === 'production'
-        ? process.env.DBPASSWORD
+        ? process.env.DB_PASSWORD
         : 'devpassword',
     database:
-      process.env.NODE_ENV === 'production' ? process.env.PGDATABASE : 'devdb',
-    url: process.env.DATABASE_URL,
-  }, */
+      process.env.NODE_ENV === 'production' ? process.env.DB_NAME : 'devdb',
+    url: process.env.DB_URL,
+  },
 });
