@@ -7,9 +7,8 @@ import {
   Param,
   Delete,
   Query,
-  Request,
-  DefaultValuePipe,
-  ParseIntPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -20,15 +19,13 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @UseInterceptors(ClassSerializerInterceptor)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.createUser(createUserDto);
   }
 
   @Get()
-  findAll(
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-  ) {
+  findAll(@Query('limit') limit: number, @Query('page') page: number) {
     return this.userService.findAllUsers(page, limit);
   }
 
@@ -39,8 +36,6 @@ export class UserController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    console.log(`Updating user ${id}`);
-    console.log('Update data:', updateUserDto);
     return this.userService.update(id, updateUserDto);
   }
 
