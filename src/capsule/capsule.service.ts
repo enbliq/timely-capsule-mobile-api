@@ -4,30 +4,69 @@ import { UpdateCapsuleDto } from './dto/update-capsule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Capsule } from './entities/capsule.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/user/entities/user.entity';
+import { FindOneById } from './providers/findone';
+import { UserService } from 'src/user/user.service';
+import { HashingProvider } from 'src/auth/provider/hashing.provider';
+
 
 
 @Injectable()
 export class CapsuleService {
   constructor(
     @InjectRepository(Capsule) private readonly capsuleRepository: Repository<Capsule>,
-  ) {}
-  create(createCapsuleDto: CreateCapsuleDto) {
-    return 'This action adds a new capsule';
-  }
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly findOneByIdService:FindOneById,
+    private readonly userService:UserService,
+    private readonly hashingProvider: HashingProvider,
 
+  ) {}
+
+  async create(createCapsuleDto: CreateCapsuleDto): Promise<Capsule> {
+    try {
+      // Validate that createdBy is a valid number
+      if (!createCapsuleDto || typeof createCapsuleDto.createdBy!== 'number') {
+        throw new Error('Invalid or missing createdBy ID');
+      }
+  
+      // Find the user by its numeric ID
+      const user = await this.userService.findOneById(createCapsuleDto.createdBy);
+  
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      // Hash the password if it exists in the DTO
+    if (createCapsuleDto.password) {
+      createCapsuleDto.password = await this.hashingProvider.hashPassword(createCapsuleDto.password);
+    }
+
+      // Create a new capsule instance
+      const capsule = this.capsuleRepository.create({
+      ...createCapsuleDto,
+        createdBy: user, // Assign the user relation
+      });
+  
+      // Save the capsule in the database
+      return await this.capsuleRepository.save(capsule);
+    } catch (error) {
+      throw new Error(`Failed to create capsule: ${error.message}`);
+    }
+  }
+  
+  
   findAll() {
     return `This action returns all capsule`;
   }
 
-  async findOneById(id: string): Promise<Capsule | null> {
+  async findOneById(id: number): Promise<Capsule | null> {
     return this.capsuleRepository.findOne({ where: { id } });
   }
 
-  update(id: number, updateCapsuleDto: UpdateCapsuleDto) {
-    return `This action updates a #${id} capsule`;
-  }
-
-  async deleteCapsule(id: string) {
+    // update(id: number, updateDto: UpdateCapsuleDto {
+    //    return `This action updates a #${id} capsule`;
+    //  }
+  async deleteCapsule(id: number) {
     const capsule = await this.findOneById(id);
 
     if (!capsule) {
