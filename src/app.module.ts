@@ -13,11 +13,11 @@ import { PaginationModule } from './common/pagination/pagination.module';
 import { AdminModule } from './admin/admin.module';
 import { ActivityLogModule } from './activity-log/activity-log.module';
 import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/activity-logger.middleware';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { DataResponseInterceptor } from './common/data-response/data-response-interceptor.interceptor';
 import { MetricsModule } from './metrics/metrics.module';
 import { ContentModule } from './content/content.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
-
-(global as any).crypto = crypto;
 
 @Module({
   imports: [
@@ -56,7 +56,13 @@ import { RecommendationModule } from './recommendation/recommendation.module';
     RecommendationModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DataResponseInterceptor,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
