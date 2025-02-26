@@ -15,6 +15,9 @@ import { ActivityLogModule } from './activity-log/activity-log.module';
 import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/activity-logger.middleware';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataResponseInterceptor } from './common/data-response/data-response-interceptor.interceptor';
+import { MetricsModule } from './metrics/metrics.module';
+import { ContentModule } from './content/content.module';
+import { RecommendationModule } from './recommendation/recommendation.module';
 
 @Module({
   imports: [
@@ -48,6 +51,9 @@ import { DataResponseInterceptor } from './common/data-response/data-response-in
     PaginationModule,
     AdminModule,
     ActivityLogModule,
+    MetricsModule,
+    ContentModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [
