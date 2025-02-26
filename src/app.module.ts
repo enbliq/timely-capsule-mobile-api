@@ -18,6 +18,7 @@ import { DataResponseInterceptor } from './common/data-response/data-response-in
 import { MetricsModule } from './metrics/metrics.module';
 import { ContentModule } from './content/content.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -54,6 +55,7 @@ import { RecommendationModule } from './recommendation/recommendation.module';
     MetricsModule,
     ContentModule,
     RecommendationModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [
