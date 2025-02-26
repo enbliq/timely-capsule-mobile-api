@@ -10,10 +10,10 @@ import { User } from 'src/user/entities/user.entity';
 import { GuestCapsuleAccessLog } from 'src/guest/entities/guest.entity';
 import { Transaction } from 'src/transaction/entities/transaction.entity';
 
-@Entity()
+@Entity('capsule')
 export class Capsule {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   title: string;
@@ -28,8 +28,8 @@ export class Capsule {
   })
   media: string;
 
-  @Column()
-  password: string;
+  @Column('varchar', { nullable: true })
+  password?: string;
 
   @Column()
   recipientEmail: string;
@@ -39,11 +39,20 @@ export class Capsule {
   })
   recipientLink: string;
 
-  @Column()
+  
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   unlockAt: Date;
 
-  @Column()
+
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   expiresAt: Date;
+
 
   @Column({
     nullable: true,
@@ -60,7 +69,10 @@ export class Capsule {
   })
   isGuest: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.capsules, {

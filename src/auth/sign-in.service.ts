@@ -1,19 +1,21 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
 import { HashingProvider } from './provider/hashing.provider';
-import type { SignInDto } from './dto/sign-in.dto';
-import { UserService } from 'src/user/user.service';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Injectable()
 export class SignInService {
   constructor(
-    // private userService: UserService,
-    // private hashProvider: HashingProvider,
-    // private jwtService: JwtService,
-
-    @Inject(HashingProvider) private hashProvider: HashingProvider,
-    @Inject(JwtService) private jwtService: JwtService,
-    @Inject(UserService) private userService: UserService,
+    @Inject(forwardRef(() => UserService))
+    private readonly userService: UserService,
+    private readonly hashProvider: HashingProvider,
+    private readonly jwtService: JwtService,
   ) {}
 
   async signIn(signInDto: SignInDto): Promise<{ access_token: string }> {
@@ -24,7 +26,7 @@ export class SignInService {
 
       const isPasswordValid = await this.hashProvider.comparePassword(
         password,
-        user.passwordHash,
+        user.password,
       );
 
       if (!isPasswordValid) {

@@ -1,56 +1,60 @@
-import { 
-  IsString, 
-  IsEmail, 
-  IsOptional, 
-  IsBoolean, 
-  IsUUID, 
-  IsDateString, 
-  IsNotEmpty 
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  IsBoolean,
+  IsUUID,
+  IsNotEmpty,
+  MaxLength,
+  Matches,
+  IsInt
 } from 'class-validator';
 
 export class CreateCapsuleDto {
   @IsString()
-  @IsOptional()  // Ensure title is not empty
-  title: string;
+  @IsOptional()  // Allow title to be optional
+  title?: string;
 
   @IsString()
-  @IsOptional()  // Ensure content is not empty
-  content: string;
+  @IsOptional()  // Allow content to be optional
+  content?: string;
 
   @IsOptional()
   @IsString()
   media?: string;
 
+
   @IsString()
-  @IsNotEmpty()  // Ensure password is not empty
-  password: string;
+  @MaxLength(16)  // Adjust max length to match the regex
+  @Matches(
+    /^[a-zA-Z0-9]{8,16}$/,  // Accept only letters and numbers (8-16 chars)
+    {
+      message: 'Password must contain only letters and numbers, between 8 to 16 characters.',
+    }
+  )
+  password?: string;
 
   @IsEmail()
-  @IsOptional()  // Ensure recipientEmail is not empty
-  recipientEmail: string;
+  @IsOptional()  // Allow recipientEmail to be optional
+  recipientEmail?: string;
 
   @IsOptional()
   @IsString()
   recipientLink?: string;
 
-  @IsDateString()  // Validates as a date string
-  unlockAt: string;
-
-  @IsDateString()  // Validates as a date string
-  expiresAt: string;
-
   @IsOptional()
   @IsString()
   fundId?: string;
 
-  @IsOptional()  // Allow isClaimed to be optional
+  @IsOptional()
   @IsBoolean()
   isClaimed?: boolean;
 
-  @IsOptional()  // Allow isGuest to be optional
+  @IsOptional()
   @IsBoolean()
   isGuest?: boolean;
 
-  @IsUUID()  // Ensure this is a UUID and make it required
-  createdBy: string; 
+  @IsNotEmpty()
+  @IsInt()
+  createdBy: number;  // Must be a valid UUID string
 }

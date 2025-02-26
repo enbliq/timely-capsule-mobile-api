@@ -8,7 +8,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { GuestService } from './guest.service';
-import { CreateGuestCapsuleAccessLogDto } from './dto/create-guest.dto';
+import { GuestCapsuleAccessLogDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
 
 // @Controller('guest')
@@ -16,7 +16,7 @@ import { UpdateGuestDto } from './dto/update-guest.dto';
 //   constructor(private readonly guestService: GuestService) {}
 
   // @Post()
-  // create(@Body() createGuestDto: CreateGuestCapsuleAccessLogDto) {
+  // create(@Body() createGuestDto: GuestCapsuleAccessLogDto) {
   //   return this.guestService.create(createGuestDto);
   // }
 

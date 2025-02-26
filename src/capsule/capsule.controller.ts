@@ -9,10 +9,10 @@ import { NotFoundException, } from '@nestjs/common';
 export class CapsuleController {
   constructor(private readonly capsuleService: CapsuleService) {}
 
-  @Post()
-  create(@Body() createCapsuleDto: CreateCapsuleDto) {
-    return this.capsuleService.create(createCapsuleDto);
-  }
+  // @Post()
+  // create(@Body() createCapsuleDto: CreateCapsuleDto) {
+  //   return this.capsuleService.create(createCapsuleDto);
+  // }
 
   @Get()
   findAll() {
@@ -20,7 +20,7 @@ export class CapsuleController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: number) {
     const capsule = await this.capsuleService.findOneById(id);
     if (!capsule) {
       throw new NotFoundException('Capsule not found');
@@ -29,12 +29,12 @@ export class CapsuleController {
   }
 
 @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCapsuleDto: CreateCapsuleDto) {
+  update(@Param('id') id: number, @Body() updateCapsuleDto: CreateCapsuleDto) {
       return this.capsuleService.update(id, updateCapsuleDto);
   }
   
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id') id: number) {
    return await this.capsuleService.deleteCapsule(id)
   }
 }

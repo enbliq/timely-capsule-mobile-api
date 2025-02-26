@@ -1,0 +1,16 @@
+GET http://localhost:3000/user
+
+
+GET http://localhost:3000/user?page=2&limit=3
+
+
+DELETE http://localhost:3000/user/2
+
+
+POST http://localhost:3000/user
+Content-Type: application/json
+{
+    "name": "Testing5",
+    "email": "example5@gmail.com",
+    "password": "password"
+}

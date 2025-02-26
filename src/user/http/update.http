@@ -1,0 +1,104 @@
+# Create a new user account
+# @name signup
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "yourpassword123",
+    "profilePicture": "https://example.com/pic.jpg",
+    "isGuest": false,
+    "subscriptionTier": "free",
+    "walletAddress": "0x987654321"
+}
+
+###
+# Sign in to get the access token
+# @name login
+POST http://localhost:3000/auth/sign-in
+Content-Type: application/json
+
+{
+    "email": "test@example.com",
+    "password": "yourpassword123"
+}
+
+###
+# Store the token and extract ID if available
+@authToken = {{login.response.body.access_token}}
+@userId = {{login.response.body.userId || "1"}}
+
+###
+# Get a list of users to find our user ID
+# @name getUsers
+GET http://localhost:3000/user
+###
+# Update user profile with all fields
+# @name updateFull
+PATCH http://localhost:3000/user/1
+Content-Type: application/json
+
+{
+    "name": "Updated Name",
+    "email": "updated@example.com",
+    "password": "newpassword123",
+    "profilePicture": "https://example.com/new-pic.jpg",
+    "isGuest": false,
+    "subscriptionTier": "premium",
+    "walletAddress": "0x123456789"
+}
+
+###
+# Update only specific fields
+# @name updatePartial
+PATCH http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+    "name": "Just Name Update",
+    "subscriptionTier": "basic"
+}
+
+###
+# Try to update without authentication
+# @name updateUnauthorized
+PATCH http://localhost:3000/users/1
+Content-Type: application/json
+
+{
+    "name": "Should Fail"
+}
+
+###
+# Try to update another user's profile
+# @name updateOtherUser
+PATCH http://localhost:3000/users/2
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "name": "Should Fail"
+}
+
+###
+# Update with invalid email format
+# @name updateInvalidEmail
+PATCH http://localhost:3000/users/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "email": "not-an-email"
+}
+
+###
+# Update with short password
+# @name updateInvalidPassword
+PATCH http://localhost:3000/users/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+    "password": "short"
+}
