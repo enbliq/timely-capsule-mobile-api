@@ -4,7 +4,6 @@ import { UpdateCapsuleDto } from './dto/update-capsule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Capsule } from './entities/capsule.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/user/entities/user.entity';
 import { FindOneById } from './providers/findone';
 import { UserService } from 'src/user/user.service';
 import { HashingProvider } from 'src/auth/provider/hashing.provider';
@@ -15,7 +14,6 @@ import { HashingProvider } from 'src/auth/provider/hashing.provider';
 export class CapsuleService {
   constructor(
     @InjectRepository(Capsule) private readonly capsuleRepository: Repository<Capsule>,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly findOneByIdService:FindOneById,
     private readonly userService:UserService,
     private readonly hashingProvider: HashingProvider,
