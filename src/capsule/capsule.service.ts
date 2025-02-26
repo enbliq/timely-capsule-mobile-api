@@ -27,7 +27,7 @@ export class CapsuleService {
         throw new Error('Invalid or missing createdBy ID');
       }
   
-      // Find the user by its numeric ID
+      // Find the user by its numeric IDs i.e the nubmer
       const user = await this.userService.findOneById(createCapsuleDto.createdBy);
   
       if (!user) {
