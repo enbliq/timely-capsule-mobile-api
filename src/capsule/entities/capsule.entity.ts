@@ -1,5 +1,3 @@
-
-import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -12,49 +10,75 @@ import { User } from 'src/user/entities/user.entity';
 import { GuestCapsuleAccessLog } from 'src/guest/entities/guest.entity';
 import { Transaction } from 'src/transaction/entities/transaction.entity';
 
-@Entity()
+@Entity('capsule')
 export class Capsule {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   title: string;
 
-  @Column({ type: 'text' })
+  @Column({
+    type: 'text',
+  })
   content: string;
 
-  @Column({ nullable: true })
+  @Column({
+    nullable: true,
+  })
   media: string;
 
-  @Column({ nullable: true })
-  @Exclude()
+  @Column('varchar', { nullable: true })
   password?: string;
 
   @Column()
   recipientEmail: string;
 
-  @Column({ nullable: true })
+  @Column({
+    nullable: true,
+  })
   recipientLink: string;
 
-  @Column()
+  
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   unlockAt: Date;
 
-  @Column()
+
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   expiresAt: Date;
 
-  @Column({ nullable: true })
+
+  @Column({
+    nullable: true,
+  })
   fundId: string;
 
-  @Column({ default: false })
+  @Column({
+    default: false,
+  })
   isClaimed: boolean;
 
-  @Column({ default: false })
+  @Column({
+    default: false,
+  })
   isGuest: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.capsules, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.capsules, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   createdBy: User;
 
   @OneToMany(() => GuestCapsuleAccessLog, (log) => log.capsule)
