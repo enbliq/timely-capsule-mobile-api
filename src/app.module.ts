@@ -14,6 +14,8 @@ import { AdminModule } from './admin/admin.module';
 import { ActivityLogModule } from './activity-log/activity-log.module';
 import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/activity-logger.middleware';
 import { MetricsModule } from './metrics/metrics.module';
+import { ContentModule } from './content/content.module';
+import { RecommendationModule } from './recommendation/recommendation.module';
 
 (global as any).crypto = crypto;
 
@@ -50,6 +52,8 @@ import { MetricsModule } from './metrics/metrics.module';
     AdminModule,
     ActivityLogModule,
     MetricsModule,
+    ContentModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
