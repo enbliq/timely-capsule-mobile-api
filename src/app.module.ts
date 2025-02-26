@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import appConfig from '../config/config';
 import { AppController } from './app.controller';
@@ -13,8 +13,11 @@ import { PaginationModule } from './common/pagination/pagination.module';
 import { AdminModule } from './admin/admin.module';
 import { ActivityLogModule } from './activity-log/activity-log.module';
 import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/activity-logger.middleware';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { DataResponseInterceptor } from './common/data-response/data-response.interceptor';
+import { MetricsModule } from './metrics/metrics.module';
+import { ContentModule } from './content/content.module';
+import { RecommendationModule } from './recommendation/recommendation.module';
+
+(global as any).crypto = crypto;
 
 @Module({
   imports: [
@@ -48,6 +51,9 @@ import { DataResponseInterceptor } from './common/data-response/data-response.in
     PaginationModule,
     AdminModule,
     ActivityLogModule,
+    MetricsModule,
+    ContentModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [AppService, 
