@@ -1,18 +1,9 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  NotFoundException,
-  UseInterceptors,
-  ClassSerializerInterceptor,
-} from '@nestjs/common';
+
+import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CapsuleService } from './capsule.service';
 import { CreateCapsuleDto } from './dto/create-capsule.dto';
 import { UpdateCapsuleDto } from './dto/update-capsule.dto';
+import { NotFoundException, } from '@nestjs/common';
 
 @Controller('capsule')
 export class CapsuleController {
@@ -35,17 +26,18 @@ export class CapsuleController {
     if (!capsule) {
       throw new NotFoundException('Capsule not found');
     }
-    return capsule;
+    return capsule; 
   }
+
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateCapsuleDto: UpdateCapsuleDto) {
-    return this.capsuleService.update(Number(id), updateCapsuleDto);
+  update(@Param('id') id: number, @Body() updateCapsuleDto: CreateCapsuleDto) {
+      return this.capsuleService.update(id, updateCapsuleDto);
   }
-
-  // @Delete(':id')
-  // async delete(@Param('id') id: string) {
-  //   return await this.capsuleService.deleteCapsule(id);
-  // }
+  
+  @Delete(':id')
+  async delete(@Param('id') id: number) {
+   return await this.capsuleService.deleteCapsule(id)
+  }
 }
 
