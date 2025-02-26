@@ -56,12 +56,7 @@ import { RecommendationModule } from './recommendation/recommendation.module';
     RecommendationModule,
   ],
   controllers: [AppController],
-  providers: [AppService, 
-    {
-      provide:APP_INTERCEPTOR,
-      useClass:DataResponseInterceptor
-    }
-  ],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -1,7 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { DataResponseInterceptor } from './common/data-response/data-response.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,7 +13,6 @@ async function bootstrap() {
       transform: true, // Transforms input to match DTO types (e.g., string to number)
     }),
   );
-  app.useGlobalInterceptors(new DataResponseInterceptor());
 
   await app.listen(3000);
 }
