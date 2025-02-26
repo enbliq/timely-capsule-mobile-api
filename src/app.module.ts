@@ -16,6 +16,7 @@ import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/ac
 import { MetricsModule } from './metrics/metrics.module';
 import { ContentModule } from './content/content.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
+import { SearchModule } from './search/search.module';
 
 (global as any).crypto = crypto;
 
@@ -54,6 +55,7 @@ import { RecommendationModule } from './recommendation/recommendation.module';
     MetricsModule,
     ContentModule,
     RecommendationModule,
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [AppService],
