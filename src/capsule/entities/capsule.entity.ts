@@ -1,3 +1,5 @@
+
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -18,17 +20,14 @@ export class Capsule {
   @Column()
   title: string;
 
-  @Column({
-    type: 'text',
-  })
+  @Column({ type: 'text' })
   content: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   media: string;
 
-  @Column('varchar', { nullable: true })
+  @Column({ nullable: true })
+  @Exclude()
   password?: string;
 
   @Column()
@@ -59,6 +58,7 @@ export class Capsule {
   })
   fundId: string;
 
+  @Column({ default: false })
   @Column({
     default: false,
   })

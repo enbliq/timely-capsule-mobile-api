@@ -56,5 +56,5 @@ export class CreateCapsuleDto {
 
   @IsNotEmpty()
   @IsInt()
-  createdBy: number;  // Must be a valid UUID string
+  createdBy?: number;  // Must be a valid UUID string
 }
