@@ -1,6 +1,5 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import appConfig from '../config/config';
 import { AppController } from './app.controller';
@@ -14,6 +13,10 @@ import { PaginationModule } from './common/pagination/pagination.module';
 import { AdminModule } from './admin/admin.module';
 import { ActivityLogModule } from './activity-log/activity-log.module';
 import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/activity-logger.middleware';
+import { RedisClientOptions } from 'redis';
+import { CacheModule } from '@nestjs/cache-manager';
+import redisStore from 'cache-manager-redis-store';
+
 
 @Module({
   imports: [
@@ -39,6 +42,16 @@ import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/ac
       //   autoLoadEntities: true,
       // }),
     }),
+    CacheModule.registerAsync<RedisClientOptions>({
+      useFactory: async () => ({
+        store: redisStore,
+        socket: {
+          host: 'localhost',
+          port: 6379,
+        },
+        ttl: 600, // 10 minutes
+      }),
+    }),
     UserModule,
     AuthModule,
     TransactionModule,
@@ -50,6 +63,7 @@ import { ActivityLoggerMiddleware } from './common/middleware/activity-logger/ac
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports:[CacheModule]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

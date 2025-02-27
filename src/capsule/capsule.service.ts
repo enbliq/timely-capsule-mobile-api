@@ -12,7 +12,7 @@ export class CapsuleService {
     @InjectRepository(Capsule) private readonly capsuleRepository: Repository<Capsule>,
   ) {}
   create(createCapsuleDto: CreateCapsuleDto) {
-    return 'This action adds a new capsule';
+    return 'Capsule Created succefully'
   }
 
   findAll() {

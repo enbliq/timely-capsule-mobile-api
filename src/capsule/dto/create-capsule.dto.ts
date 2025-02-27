@@ -28,11 +28,11 @@ import {
     @IsString()
     recipientLink?: string;
   
-    @IsDate()
-    unlockAt: Date;
+    // @IsDate()
+    // unlockAt: Date;
   
-    @IsDate()
-    expiresAt: Date;
+    // @IsDate()
+    // expiresAt: Date;
   
     @IsOptional()
     @IsString()
