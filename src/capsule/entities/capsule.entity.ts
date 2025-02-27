@@ -56,6 +56,7 @@ export class Capsule {
   })
   fundId: string;
 
+  @Column({ default: false })
   @Column({
     default: false,
   })

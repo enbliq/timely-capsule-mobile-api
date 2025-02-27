@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer,  NestModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import appConfig from '../config/config';
@@ -52,10 +52,10 @@ import { SearchModule } from './search/search.module';
     PaginationModule,
     AdminModule,
     ActivityLogModule,
-    MetricsModule,
-    ContentModule,
-    RecommendationModule,
-    SearchModule,
+    // MetricsModule,
+    // ContentModule,
+    // RecommendationModule,
+    // SearchModule,
   ],
   controllers: [AppController],
   providers: [

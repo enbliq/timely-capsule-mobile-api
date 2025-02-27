@@ -10,7 +10,7 @@ DELETE http://localhost:3000/user/2
 POST http://localhost:3000/user
 Content-Type: application/json
 {
-    "name": "Test",
-    "email": "example@gmail.com",
+    "name": "Testing5",
+    "email": "example5@gmail.com",
     "password": "password"
 }

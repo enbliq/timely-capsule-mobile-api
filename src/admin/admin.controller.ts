@@ -1,17 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Query,
-  BadRequestException,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
+import { PaginationQueryDto } from 'src/common/pagination/dto/pagination-query-dto.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -28,7 +19,6 @@ export class AdminController {
     @Query('page') page: number = 1,
     @Query('limit') limit: number = 10,
   ) {
-    // Convert the isUnlocked query parameter to a boolean or undefined
     const unlockStatus =
       isUnlocked === 'true' ? true : isUnlocked === 'false' ? false : undefined;
 
@@ -45,6 +35,14 @@ export class AdminController {
       page,
       limit,
     );
+  }
+
+  @Get()
+  async findAllCapsules(
+    @Query() paginationQueryDto: PaginationQueryDto,
+    @Query('months') months?: number
+  ) {
+    return this.adminService.findAllCapsules(paginationQueryDto, months);
   }
 
   @Get(':id')
