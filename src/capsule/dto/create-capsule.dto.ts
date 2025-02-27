@@ -23,6 +23,7 @@ export class CreateCapsuleDto {
   @IsString()
   media?: string;
 
+
   @IsString()
   @MaxLength(16)  // Adjust max length to match the regex
   @Matches(
@@ -55,5 +56,5 @@ export class CreateCapsuleDto {
 
   @IsNotEmpty()
   @IsInt()
-  createdBy: number;  // Must be a valid UUID string
+  createdBy?: number;  // Must be a valid UUID string
 }

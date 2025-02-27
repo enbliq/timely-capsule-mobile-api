@@ -10,6 +10,7 @@ export class CapsuleController {
   constructor(private readonly capsuleService: CapsuleService) {}
 
   @Post()
+  @UseInterceptors(ClassSerializerInterceptor)
   create(@Body() createCapsuleDto: CreateCapsuleDto) {
     return this.capsuleService.create(createCapsuleDto);
   }
@@ -28,10 +29,11 @@ export class CapsuleController {
     return capsule; 
   }
 
-// @Patch(':id')
-//   update(@Param('id') id: number, @Body() updateCapsuleDto: CreateCapsuleDto) {
-//       return this.capsuleService.update(id, updateCapsuleDto);
-//   }
+
+  @Patch(':id')
+  update(@Param('id') id: number, @Body() updateCapsuleDto: CreateCapsuleDto) {
+      return this.capsuleService.update(id, updateCapsuleDto);
+  }
   
   @Delete(':id')
   async delete(@Param('id') id: number) {
