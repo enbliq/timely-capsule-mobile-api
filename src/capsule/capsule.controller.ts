@@ -9,11 +9,11 @@ import { NotFoundException, } from '@nestjs/common';
 export class CapsuleController {
   constructor(private readonly capsuleService: CapsuleService) {}
 
-  // @Post()
-  // @UseInterceptors(ClassSerializerInterceptor)
-  // create(@Body() createCapsuleDto: CreateCapsuleDto) {
-  //   return this.capsuleService.create(createCapsuleDto);
-  // }
+  @Post()
+  @UseInterceptors(ClassSerializerInterceptor)
+  create(@Body() createCapsuleDto: CreateCapsuleDto) {
+    return this.capsuleService.create(createCapsuleDto);
+  }
 
   @Get()
   findAll() {

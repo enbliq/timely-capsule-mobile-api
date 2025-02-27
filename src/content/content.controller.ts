@@ -22,10 +22,10 @@ export class ContentController {
     return this.contentService.findOne(+id);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateContentDto: UpdateContentDto) {
-  //   return this.contentService.update(+id, updateContentDto);
-  // }
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateContentDto: UpdateContentDto) {
+    return this.contentService.update(+id, updateContentDto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

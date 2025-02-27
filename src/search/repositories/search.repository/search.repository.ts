@@ -85,11 +85,11 @@ export class SearchRepository {
     const items = await qb.getMany();
 
     return {
-      // items,
-      // total,
-      // page,
-      // limit,
-      // hasNext: page * limit < total,
+      items,
+      total,
+      page,
+      limit,
+      hasNext: page * limit < total,
     };
   }
 
