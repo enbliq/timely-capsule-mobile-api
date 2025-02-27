@@ -9,7 +9,7 @@ import { GenerateTokensProvider } from './provider/generate-token.provider';
 import { BcryptProvider } from './provider/bcrpt.provider';
 import { HashingProvider } from './provider/hashing.provider';
 import { UserModule } from 'src/user/user.module';
-import { RefreshTokenProvider } from './provider/refreshToken.provider';
+// import { RefreshTokenProvider } from './provider/refreshToken.provider';
 import { SignInService } from './sign-in.service';
 
 @Module({
@@ -27,7 +27,7 @@ import { SignInService } from './sign-in.service';
       provide: HashingProvider,
       useClass: BcryptProvider,
     },
-    RefreshTokenProvider,
+    // RefreshTokenProvider,
     SignInService,
   ],
   exports: [AuthService, SignInService, HashingProvider],

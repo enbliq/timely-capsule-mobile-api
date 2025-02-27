@@ -1,42 +1,28 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { GuestService } from './guest.service';
-import { GuestCapsuleAccessLogDto } from './dto/create-guest.dto';
-import { UpdateGuestDto } from './dto/update-guest.dto';
+/* eslint-disable prettier/prettier */
+
+import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
+import { GuestService } from './providers/guest.service';
+import { GuestGuard } from './providers/guest.guard';
 
 @Controller('guest')
 export class GuestController {
   constructor(private readonly guestService: GuestService) {}
 
-  @Post()
-  create(@Body() createGuestDto: GuestCapsuleAccessLogDto) {
-    return this.guestService.create(createGuestDto);
+  @Post('login')
+  async guestLogin() {
+    const guestId = await this.guestService.createGuestSession();
+    return { guestId, message: 'Guest session created. Expires in 10 minutes.' };
+  }
+  @Delete('logout')
+  async guestLogout(@Body() body: { guestId: string }) {
+    await this.guestService.deleteGuestSession(body.guestId);
+    return { message: 'Guest session deleted.' };
+  }
+  @Get('validate')
+  @UseGuards(GuestGuard)
+  async validateGuestSession(@Body() body: { guestId: string }) {
+    const isValid = await this.guestService.isGuestSessionValid(body.guestId);
+    return { isValid };
   }
 
-  @Get()
-  findAll() {
-    return this.guestService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.guestService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGuestDto: UpdateGuestDto) {
-    return this.guestService.update(+id, updateGuestDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.guestService.remove(+id);
-  }
 }
