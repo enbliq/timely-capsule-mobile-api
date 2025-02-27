@@ -39,20 +39,26 @@ export class Capsule {
   })
   recipientLink: string;
 
-  
+
+  @CreateDateColumn()
+  unlockAt: Date;
+
+  @CreateDateColumn({
+    type: 'timestamptz', 
+    default: () => 'CURRENT_TIMESTAMP', 
+
   @Column({
     type: 'date',
     default: () => 'CURRENT_TIMESTAMP',
   })
   unlockAt: Date;
 
-
   @Column({
     type: 'date',
     default: () => 'CURRENT_TIMESTAMP',
+
   })
   expiresAt: Date;
-
 
   @Column({
     nullable: true,
