@@ -20,6 +20,11 @@ export class CapsuleService {
 
   ) {}
 
+  create(createCapsuleDto: CreateCapsuleDto) {
+    return 'Capsule Created succefully'
+  }
+
+
   async create(createCapsuleDto: CreateCapsuleDto): Promise<Capsule> {
     try {
       // Validate that createdBy is a valid number
