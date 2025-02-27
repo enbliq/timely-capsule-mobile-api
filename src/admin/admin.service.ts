@@ -36,8 +36,7 @@ export class AdminService {
       throw new BadRequestException('Invalid isUnlocked parameter');
     }
 
-    const queryBuilder: SelectQueryBuilder<Capsule> =
-      this.capsuleRepository.createQueryBuilder('capsule');
+    const queryBuilder = this.capsuleRepository.createQueryBuilder('capsule');
 
     if (isUnlocked !== undefined) {
       if (isUnlocked) {
@@ -47,11 +46,22 @@ export class AdminService {
       }
     }
 
+    // Execute the query and get filtered capsules
+    const filteredCapsules = await queryBuilder.getMany();
+
+    // Convert the array to a temporary repository-like object
+    const customRepository = {
+      find: ({ skip, take }) =>
+        Promise.resolve(filteredCapsules.slice(skip, skip + take)),
+      count: () => Promise.resolve(filteredCapsules.length),
+    };
+
     return await this.paginationService.paginationQuery(
       { page, limit },
-      queryBuilder,
+      customRepository as Repository<Capsule>,
     );
   }
+
   update(id: number, updateAdminDto: UpdateAdminDto) {
     return `This action updates a #${id} admin`;
   }
