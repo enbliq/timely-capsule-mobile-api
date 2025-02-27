@@ -1,0 +1,17 @@
+
+
+PATCH http://localhost:3000/capsule/4
+Content-Type: application/json
+{
+    "title": "sucessfully edit Title7",
+    "content": "Updated content for the capsule.",
+    "media": "http://example.com/media.jpg",
+    "password": "12345pass",
+    "recipientEmail": "messadddtest@gmail.com",
+    "recipientLink": "http://example.com/recipientsss",
+    "fundId": "somefunding",
+    "isClaimed": false,
+    "isGuest": true,
+    "createdBy" : 5
+    
+}

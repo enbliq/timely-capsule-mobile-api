@@ -8,5 +8,6 @@ import { GuestCapsuleAccessLog } from './entities/guest.entity';
   imports: [TypeOrmModule.forFeature([GuestCapsuleAccessLog])],
   controllers: [GuestController],
   providers: [GuestService],
+  exports:[GuestService]
 })
 export class GuestModule {}
