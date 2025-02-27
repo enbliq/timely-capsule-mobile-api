@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -17,45 +18,34 @@ export class User {
   @Column()
   name: string;
 
-  @Column({
-    type: 'varchar',
-    unique: true, // this ensures email address is unique
-  })
+  @Column({ unique: true })
   email: string;
 
   @Column()
+  @Exclude()
   password: string;
 
-  @Column({
-    nullable: true, // this allows null values for profilePicture
-  })
+  @Column({ nullable: true })
   profilePicture: string;
 
-  @Column({
-    default: false, // set the default value to false
-  })
+  @Column({ default: false })
   isGuest: boolean;
 
-  @Column({
-    nullable: true, // this allows null values for subscriptionTier
-  })
+  @Column({ nullable: true })
   subscriptionTier: string;
 
-  @Column({
-    nullable: true, // this allows null values for walletAddress
-    unique: true, // makes the walletAddress to be Unique
-  })
+  @Column({ nullable: true, unique: true })
   walletAddress: string;
 
-  @CreateDateColumn() // this auto updates date & time upon creation of a user
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn() // this auto updates date & time upon logIn of a user
+  @UpdateDateColumn()
   lastLogin: Date;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.user) // a USER should also have a one-to-many relationship with the Transaction entity
+  @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
 
-  @OneToMany(() => Capsule, (capsule) => capsule.createdBy) // a USER  should have a one-to-many relationship with the Capsule entity
+  @OneToMany(() => Capsule, (capsule) => capsule.createdBy)
   capsules: Capsule[];
 }

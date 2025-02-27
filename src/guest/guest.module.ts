@@ -11,6 +11,11 @@ import { GuestCapsuleAccessLog } from './entities/guest.entity';
 @Module({
   imports: [ TypeOrmModule.forFeature([GuestCapsuleAccessLog]),CacheModule.register(),],
   controllers: [GuestController],
+
   providers: [GuestService, RedisService, GuestGuard],
+
+  providers: [GuestService],
+  exports:[GuestService]
+
 })
 export class GuestModule {}

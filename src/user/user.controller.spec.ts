@@ -17,4 +17,9 @@ describe('UserController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('should exclude password field from response', async () => {
+    const result = await controller.create({name:'test', email: 'test@example.com', password: '123456' });
+    expect(result.password).toBeUndefined();
+  });
 });
