@@ -1,35 +1,52 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsDate, IsObject } from "class-validator"
+import { ApiProperty } from '@nestjs/swagger';
+import { IsDate, IsObject } from 'class-validator';
 
 export class AggregatedAnalyticsDto {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Timestamp of the analytics data',
+    type: Date,
+  })
   @IsDate()
-  timestamp: Date
+  timestamp: Date;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Player engagement data',
+    type: Object,
+  })
   @IsObject()
-  playerEngagement: Record<string, any>
+  playerEngagement: Record<string, any>;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Song categories data',
+    type: Object,
+  })
   @IsObject()
-  songCategories: Record<string, any>
+  songCategories: Record<string, any>;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Token economy data',
+    type: Object,
+  })
   @IsObject()
-  tokenEconomy: Record<string, any>
+  tokenEconomy: Record<string, any>;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'User progression data',
+    type: Object,
+  })
   @IsObject()
-  userProgression: Record<string, any>
+  userProgression: Record<string, any>;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Summary containing aggregated analytics values',
+    type: Object,
+  })
   @IsObject()
   summary: {
-    totalActiveUsers: number
-    topCategory: string
-    tokenCirculation: number
-    averageUserLevel: number
-    timestamp: Date
-  }
+    totalActiveUsers: number;
+    topCategory: string;
+    tokenCirculation: number;
+    averageUserLevel: number;
+    timestamp: Date;
+  };
 }
-

@@ -2,8 +2,18 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/exceptions/filters/global-exception.filter';
+import { DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
+  /**Swagger Configuration */
+  const config = new DocumentBuilder()
+    .setTitle('TIMELY CAPSULE - timely-capsule-api')
+    .setDescription('Use the base Api URL as http://localhost:3000')
+    .setTermsOfService('http://localhost:3000/terms-of-service')
+    .addServer('http://localhost:3000')
+    .setVersion('1.0')
+    .build();
+
   const app = await NestFactory.create(AppModule);
 
   // Enable global validation pipes
@@ -15,8 +25,9 @@ async function bootstrap() {
     }),
 
     // Apply the global exception filter
-    new GlobalExceptionFilter(),
+    // new GlobalExceptionFilter(),
   );
+  app.useGlobalFilters(new GlobalExceptionFilter())
 
   await app.listen(3000);
 }
