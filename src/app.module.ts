@@ -76,8 +76,8 @@ import { SearchModule } from './search/search.module';
   ],
   controllers: [AppController],
 
-  providers: [AppService],
-  exports:[CacheModule]
+  
+  exports:[CacheModule],
 
   providers: [
     AppService,

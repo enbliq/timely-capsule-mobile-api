@@ -10,8 +10,6 @@ import {
   DefaultValuePipe,
   ParseIntPipe,
   ClassSerializerInterceptor,
-  UseInterceptors,
-} from '@nestjs/common';
 import { CapsuleService } from './capsule.service';
 import { CreateCapsuleDto } from './dto/create-capsule.dto';
 import { UpdateCapsuleDto } from './dto/update-capsule.dto';
@@ -26,6 +24,18 @@ export class CapsuleController {
   create(@Body() createCapsuleDto: CreateCapsuleDto) {
     return this.capsuleService.create(createCapsuleDto);
   }
+  //GET all capsules 
+  @ApiOperation({ summary: 'Get all capsules' })
+  @ApiResponse({ status: 200, description: 'List of capsules retrieved' })
+  @Get()
+  async getAllCapsules(@Query() paginationDto: PaginationDto) {
+    return this.capsuleService.findAllCapsules(paginationDto);  //route to get all capsules 
+  }
+
+  
+  @ApiOperation({ summary: 'Get a capsule by ID' })
+  @ApiResponse({ status: 200, description: 'Capsule retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Capsule not found' })
 
   @Get()
   public getCapsules(
@@ -33,7 +43,6 @@ export class CapsuleController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
   ) {
     return this.capsuleService.findAll(limit, page);
-  }
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
