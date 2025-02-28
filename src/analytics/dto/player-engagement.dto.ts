@@ -1,29 +1,45 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { IsNumber, IsDate, IsArray } from "class-validator"
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsDate, IsArray } from 'class-validator';
 
 export class PlayerEngagementDto {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Total number of sessions',
+    example: 120,
+  })
   @IsNumber()
-  totalSessions: number
+  totalSessions: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Total number of sessions',
+    example: 120,
+  })
   @IsNumber()
-  activeUsers: number
+  activeUsers: number;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Average session duration in minutes',
+    example: 30.5,
+  })
   @IsNumber()
-  averageSessionDuration: number
+  averageSessionDuration: number;
 
-  @ApiProperty()
+  @ApiProperty({ description: 'Retention rate as a percentage', example: 75.2 })
   @IsNumber()
-  retentionRate: number
+  retentionRate: number;
 
-  @ApiProperty({ type: [Number] })
+  @ApiProperty({
+    description: 'Hours with peak activity',
+    type: [Number],
+    example: [12, 18, 21],
+  })
   @IsArray()
-  peakActivityHours: number[]
+  peakActivityHours: number[];
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Timestamp of the engagement data',
+    type: String,
+    format: 'date-time',
+  })
   @IsDate()
-  timestamp: Date
+  timestamp: Date;
 }
-

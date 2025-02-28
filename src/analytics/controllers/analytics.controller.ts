@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards, UseInterceptors, CacheInterceptor, ValidationPipe } from "@nestjs/common"
+import { Controller, Get, Query, UseGuards, UseInterceptors, ValidationPipe } from "@nestjs/common"
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger"
 import type { PlayerEngagementService } from "../services/player-engagement.service"
 import type { SongAnalyticsService } from "../services/song-analytics.service"
@@ -11,7 +11,9 @@ import { AnalyticsAuthGuard } from "../guards/analytics-auth.guard"
 import { AnalyticsRolesGuard } from "../guards/analytics-roles.guard"
 import { AnalyticsRoles } from "../decorators/analytics-roles.decorator"
 import { AnalyticsRole } from "../enums/analytics-role.enum"
+import { CacheInterceptor } from "@nestjs/cache-manager"
 
+@ApiTags('analytics')
 @ApiTags("Analytics")
 @Controller("analytics")
 @UseGuards(AnalyticsAuthGuard, AnalyticsRolesGuard)

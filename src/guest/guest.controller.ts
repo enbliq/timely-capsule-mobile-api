@@ -3,7 +3,9 @@
 import { Body, Controller, Delete, Get, Post, UseGuards } from '@nestjs/common';
 import { GuestService } from './providers/guest.service';
 import { GuestGuard } from './providers/guest.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('guest')
 @Controller('guest')
 export class GuestController {
   constructor(private readonly guestService: GuestService) {}
