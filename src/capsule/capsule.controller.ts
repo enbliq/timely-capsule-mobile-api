@@ -8,12 +8,14 @@ import {
   Delete,
   UseInterceptors,
   ClassSerializerInterceptor,
+  Query,
 } from '@nestjs/common';
 import { CapsuleService } from './capsule.service';
 import { CreateCapsuleDto } from './dto/create-capsule.dto';
 import { UpdateCapsuleDto } from './dto/update-capsule.dto';
 import { NotFoundException } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { PaginationDto } from './dto/pagination.dto';
 
 @ApiTags('capsule')
 @Controller('capsule')
@@ -29,13 +31,15 @@ export class CapsuleController {
     return this.capsuleService.create(createCapsuleDto);
   }
 
+  //GET all capsules 
   @ApiOperation({ summary: 'Get all capsules' })
   @ApiResponse({ status: 200, description: 'List of capsules retrieved' })
   @Get()
-  findAll() {
-    return this.capsuleService.findAll();
+  async getAllCapsules(@Query() paginationDto: PaginationDto) {
+    return this.capsuleService.findAllCapsules(paginationDto);  //route to get all capsules 
   }
 
+  
   @ApiOperation({ summary: 'Get a capsule by ID' })
   @ApiResponse({ status: 200, description: 'Capsule retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Capsule not found' })
