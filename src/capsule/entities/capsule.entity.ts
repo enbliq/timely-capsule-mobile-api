@@ -37,6 +37,17 @@ export class Capsule {
   unlockAt: Date;
 
   @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  unlockAt: Date;
+
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+
   expiresAt: Date;
 
   @Column({ nullable: true })

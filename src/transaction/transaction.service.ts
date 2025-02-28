@@ -7,21 +7,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction } from './entities/transaction.entity';
 import { Repository } from 'typeorm';
 
-
 @Injectable()
 export class TransactionService {
   constructor(
     private readonly userService: UserService,
     private readonly capsuleService: CapsuleService,
-    @InjectRepository(Transaction) private readonly transactionRepository: Repository<Transaction>,
+    @InjectRepository(Transaction)
+    private readonly transactionRepository: Repository<Transaction>,
   ) {}
-  
+
   create(createTransactionDto: CreateTransactionDto) {
     return 'This action adds a new transaction';
   }
 
-  findAll() {
-    return `This action returns all transaction`;
+  public async findAll(limit: number, page: number): Promise<Transaction[]> {
+    const skip = (page - 1) * limit;
+
+    return this.transactionRepository.find({
+      skip,
+      take: limit,
+    });
   }
 
   findOne(id: number) {

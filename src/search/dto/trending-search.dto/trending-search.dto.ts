@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+// import { ApiProperty } from '@nestjs/swagger';
 
 class TrendingSearchTermDto {
   // @ApiProperty({ description: 'Search term' })
@@ -9,9 +9,9 @@ class TrendingSearchTermDto {
 }
 
 export class TrendingSearchResponseDto {
-  @ApiProperty({ 
-    description: 'Array of trending search terms with count',
-    type: [TrendingSearchTermDto]
-  })
+  // @ApiProperty({ 
+  //   description: 'Array of trending search terms with count',
+  //   type: [TrendingSearchTermDto]
+  // })
   terms: TrendingSearchTermDto[];
 }
