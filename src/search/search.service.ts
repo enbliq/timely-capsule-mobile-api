@@ -2,8 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { SearchRepository } from './repositories/search.repository/search.repository';
 import { SearchQueryDto } from './dto/search-query.dto/search-query.dto';
 import { SearchResultDto } from './dto/search-result.dto/search-result.dto';
-import { AutoSuggestionResponseDto } from './dto/auto-suggestion.dto';
-import { TrendingSearchResponseDto } from './dto/trending-search.dto';
+import { AutoSuggestionResponseDto } from './dto/auto-suggestion.dto/auto-suggestion.dto';
+import { TrendingSearchResponseDto } from './dto/trending-search.dto/trending-search.dto';
+
 
 @Injectable()
 export class SearchService {
@@ -11,7 +12,7 @@ export class SearchService {
   
   constructor(private readonly searchRepository: SearchRepository) {}
 
-  async search(searchQueryDto: SearchQueryDto): Promise<SearchResultDto<any>> {
+  async search(searchQueryDto: SearchQueryDto): Promise<SearchResultDto> {
     try {
       // Log the search query for trending searches
       if (searchQueryDto.query) {

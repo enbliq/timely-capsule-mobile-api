@@ -9,6 +9,8 @@ import {
   Query,
   UseInterceptors,
   ClassSerializerInterceptor,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,8 +27,13 @@ export class UserController {
   }
 
   @Get()
-  findAll(@Query('limit') limit: number, @Query('page') page: number) {
-    return this.userService.findAllUsers(page, limit);
+  public findAll(
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('sortBy') sortBy?: string,
+    @Query('order', new DefaultValuePipe('ASC')) order?: 'ASC' | 'DESC',
+  ) {
+    return this.userService.findAllUsers(page, limit, sortBy, order);
   }
 
   @Get(':id')

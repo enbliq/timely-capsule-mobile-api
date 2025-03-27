@@ -1,5 +1,3 @@
-
-import { Exclude } from 'class-transformer';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -12,10 +10,10 @@ import { User } from 'src/user/entities/user.entity';
 import { GuestCapsuleAccessLog } from 'src/guest/entities/guest.entity';
 import { Transaction } from 'src/transaction/entities/transaction.entity';
 
-@Entity()
+@Entity('capsule')
 export class Capsule {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   title: string;
@@ -26,8 +24,7 @@ export class Capsule {
   @Column({ nullable: true })
   media: string;
 
-  @Column({ nullable: true })
-  @Exclude()
+  @Column('varchar', { nullable: true })
   password?: string;
 
   @Column()
@@ -36,10 +33,21 @@ export class Capsule {
   @Column({ nullable: true })
   recipientLink: string;
 
-  @Column()
+  @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
   unlockAt: Date;
 
-  @Column()
+  @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  unlockAt: Date;
+
+  @Column({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+
   expiresAt: Date;
 
   @Column({ nullable: true })
@@ -54,7 +62,10 @@ export class Capsule {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.capsules, { nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.capsules, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   createdBy: User;
 
   @OneToMany(() => GuestCapsuleAccessLog, (log) => log.capsule)
