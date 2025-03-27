@@ -26,6 +26,7 @@ import { RecommendationModule } from './recommendation/recommendation.module';
 import { SearchModule } from './search/search.module';
 import { PublicCapsuleModule } from './public-capsule/public-capsule.module';
 import { PublicCapsulesController } from './public-capsule/public-capsules.controller';
+import { UserInteractionModule } from './user-interaction/user-interaction.module';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { PublicCapsulesController } from './public-capsule/public-capsules.contr
     AdminModule,
     ActivityLogModule,
     PublicCapsuleModule,
+    UserInteractionModule,
     // MetricsModule,
     // ContentModule,
     // RecommendationModule,

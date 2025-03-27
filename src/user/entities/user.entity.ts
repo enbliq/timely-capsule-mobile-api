@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { Capsule } from 'src/capsule/entities/capsule.entity';
 import { Transaction } from 'src/transaction/entities/transaction.entity';
+import { UserInteraction } from 'src/user-interaction/entities/user-interaction.entity';
 
 @Entity()
 export class User {
@@ -45,6 +46,9 @@ export class User {
 
   @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
+
+  @OneToMany(() => UserInteraction, (userInteraction) => userInteraction.user)
+  interactions: UserInteraction[];
 
   @OneToMany(() => Capsule, (capsule) => capsule.createdBy)
   capsules: Capsule[];
