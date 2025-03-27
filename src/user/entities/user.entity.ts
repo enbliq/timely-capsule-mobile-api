@@ -1,4 +1,3 @@
-// src/users/entities/user-interaction.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Capsule } from '../../capsules/entities/capsule.entity';
@@ -8,6 +7,20 @@ export enum InteractionType {
   LIKE = 'like',
   SAVE = 'save',
 }
+
+import { Exclude } from 'class-transformer';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
+import { Capsule } from 'src/capsule/entities/capsule.entity';
+import { Transaction } from 'src/transaction/entities/transaction.entity';
+import { UserInteraction } from 'src/user-interaction/entities/user-interaction.entity';
+
 
 @Entity()
 export class UserInteraction {
@@ -34,7 +47,14 @@ export class UserInteraction {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+
   @ManyToOne(() => Capsule)
   @JoinColumn({ name: 'capsuleId' })
   capsule: Capsule;
+
+  @OneToMany(() => UserInteraction, (userInteraction) => userInteraction.user)
+  interactions: UserInteraction[];
+
+  @OneToMany(() => Capsule, (capsule) => capsule.createdBy)
+  capsules: Capsule[];
 }
