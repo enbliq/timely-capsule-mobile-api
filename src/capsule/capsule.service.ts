@@ -188,3 +188,5 @@ export class CapsuleService {
     return { message: 'Capsule deleted successfully' };
   }
 }
+
+// Feature: Track User Interactions for Capsule Recommendations 

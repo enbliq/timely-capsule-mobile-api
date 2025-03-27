@@ -9,6 +9,7 @@ import {
 import { User } from 'src/user/entities/user.entity';
 import { GuestCapsuleAccessLog } from 'src/guest/entities/guest.entity';
 import { Transaction } from 'src/transaction/entities/transaction.entity';
+import { UserInteraction } from 'src/user-interaction/entities/user-interaction.entity';
 
 @Entity('capsule')
 export class Capsule {
@@ -41,7 +42,7 @@ export class Capsule {
     type: 'date',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  unlockAt: Date;
+  unlockAt: Date
 
   @Column({
     type: 'date',
@@ -70,6 +71,10 @@ export class Capsule {
 
   @OneToMany(() => GuestCapsuleAccessLog, (log) => log.capsule)
   accessLogs: GuestCapsuleAccessLog[];
+
+
+  @OneToMany(() => UserInteraction, (userInteraction) => userInteraction.capsule)
+  interactions: UserInteraction[];
 
   @OneToMany(() => Transaction, (transaction) => transaction.capsule)
   transactions: Transaction[];
