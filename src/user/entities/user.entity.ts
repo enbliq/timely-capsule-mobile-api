@@ -1,51 +1,40 @@
-import { Exclude } from 'class-transformer';
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  OneToMany,
-} from 'typeorm';
-import { Capsule } from 'src/capsule/entities/capsule.entity';
-import { Transaction } from 'src/transaction/entities/transaction.entity';
+// src/users/entities/user-interaction.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from './user.entity';
+import { Capsule } from '../../capsules/entities/capsule.entity';
+
+export enum InteractionType {
+  VIEW = 'view',
+  LIKE = 'like',
+  SAVE = 'save',
+}
 
 @Entity()
-export class User {
+export class UserInteraction {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  name: string;
-
-  @Column({ unique: true })
-  email: string;
+  userId: number;
 
   @Column()
-  @Exclude()
-  password: string;
+  capsuleId: number;
 
-  @Column({ nullable: true })
-  profilePicture: string;
+  @Column({
+    type: 'enum',
+    enum: InteractionType,
+    default: InteractionType.VIEW,
+  })
+  type: InteractionType;
 
-  @Column({ default: false })
-  isGuest: boolean;
-
-  @Column({ nullable: true })
-  subscriptionTier: string;
-
-  @Column({ nullable: true, unique: true })
-  walletAddress: string;
-
-  @CreateDateColumn()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @UpdateDateColumn()
-  lastLogin: Date;
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'userId' })
+  user: User;
 
-  @OneToMany(() => Transaction, (transaction) => transaction.user)
-  transactions: Transaction[];
-
-  @OneToMany(() => Capsule, (capsule) => capsule.createdBy)
-  capsules: Capsule[];
+  @ManyToOne(() => Capsule)
+  @JoinColumn({ name: 'capsuleId' })
+  capsule: Capsule;
 }
