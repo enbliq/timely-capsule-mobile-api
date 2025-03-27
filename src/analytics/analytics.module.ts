@@ -1,4 +1,4 @@
-import { Module, CacheModule } from "@nestjs/common"
+import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { AnalyticsController } from "./controllers/analytics.controller"
 import { PlayerEngagementService } from "./services/player-engagement.service"
@@ -13,6 +13,7 @@ import { UserProgressionMetric } from "./entities/user-progression.entity"
 import { AnalyticsRepository } from "./repositories/analytics.repository"
 import { AnalyticsAuthGuard } from "./guards/analytics-auth.guard"
 import { AnalyticsRolesGuard } from "./guards/analytics-roles.guard"
+import { CacheModule } from "@nestjs/cache-manager"
 
 @Module({
   imports: [
