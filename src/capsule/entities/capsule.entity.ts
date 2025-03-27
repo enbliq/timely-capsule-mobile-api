@@ -1,3 +1,12 @@
+
+// src/capsules/entities/capsule.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, JoinTable } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { Category } from './category.entity';
+import { Tag } from './tag.entity';
+import { UserInteraction } from '../../users/entities/user-interaction.entity';
+
+@Entity()
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -14,10 +23,17 @@ import { UserInteraction } from 'src/user-interaction/entities/user-interaction.
 @Entity('capsule')
 export class Capsule {
   @PrimaryGeneratedColumn()
+  @ApiProperty()
   id: number;
 
   @Column()
+  @ApiProperty()
   title: string;
+
+
+  @Column({ type: 'text', nullable: true })
+  @ApiProperty()
+  description: string;
 
   @Column({ type: 'text' })
   content: string;
@@ -63,15 +79,19 @@ export class Capsule {
   @CreateDateColumn()
   createdAt: Date;
 
-  @ManyToOne(() => User, (user) => user.capsules, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  createdBy: User;
+  @ManyToMany(() => Category)
+  @JoinTable()
+  @ApiProperty({ type: [Category] })
+  categories: Category[];
 
-  @OneToMany(() => GuestCapsuleAccessLog, (log) => log.capsule)
-  accessLogs: GuestCapsuleAccessLog[];
+  @ManyToMany(() => Tag)
+  @JoinTable()
+  @ApiProperty({ type: [Tag] })
+  tags: Tag[];
 
+  @OneToMany(() => UserInteraction, interaction => interaction.capsule)
+  interactions: UserInteraction[];
+}
 
   @OneToMany(() => UserInteraction, (userInteraction) => userInteraction.capsule)
   interactions: UserInteraction[];
@@ -79,3 +99,4 @@ export class Capsule {
   @OneToMany(() => Transaction, (transaction) => transaction.capsule)
   transactions: Transaction[];
 }
+

@@ -1,38 +1,31 @@
-import { Controller, Get, Param, Query, ParseIntPipe } from '@nestjs/common';
-import { RecommendationService } from './recommendation.service';
-import { Content } from '../content/entities/content.entity';
-import { ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+// src/recommendations/recommendations.controller.ts
+import { Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RecommendationsService } from './recommendations.service';
+import { Capsule } from '../capsules/entities/capsule.entity';
 
 @ApiTags('recommendations')
-@Controller('recommendations')
-export class RecommendationController {
-  constructor(private readonly recommendationService: RecommendationService) {}
+@Controller('capsules')
+export class RecommendationsController {
+  constructor(private readonly recommendationsService: RecommendationsService) {}
 
-  @ApiOperation({ summary: 'Get recommendations for a user' })
-  @ApiResponse({ status: 200, description: 'Recommendations retrieved successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid user ID or query parameters' })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  @ApiParam({ name: 'userId', type: 'number', description: 'ID of the user' })
-  @ApiQuery({ name: 'limit', type: 'number', required: false, description: 'Number of recommendations to fetch', example: 10 })
-  @Get('user/:userId')
-  async getRecommendationsForUser(
-    @Param('userId', ParseIntPipe) userId: number,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
-  ): Promise<Content[]> {
-    return this.recommendationService.getRecommendationsForUser(userId, limit);
-  }
-
-  @ApiOperation({ summary: 'Get collaborative recommendations for a user' })
-  @ApiResponse({ status: 200, description: 'Collaborative recommendations retrieved successfully' })
-  @ApiResponse({ status: 400, description: 'Invalid user ID or query parameters' })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  @ApiParam({ name: 'userId', type: 'number', description: 'ID of the user' })
-  @ApiQuery({ name: 'limit', type: 'number', required: false, description: 'Number of recommendations to fetch', example: 10 })
-  @Get('user/:userId/collaborative')
-  async getCollaborativeRecommendations(
-    @Param('userId', ParseIntPipe) userId: number,
-    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
-  ): Promise<Content[]> {
-    return this.recommendationService.getCollaborativeRecommendations(userId, limit);
+  @Get('recommendations')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get personalized capsule recommendations' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns a list of recommended capsules',
+    type: [Capsule],
+  })
+  async getRecommendations(
+    @Request() req,
+    @Query('limit') limit = 10,
+  ): Promise<Capsule[]> {
+    return this.recommendationsService.getRecommendationsForUser(
+      req.user.id,
+      limit,
+    );
   }
 }
