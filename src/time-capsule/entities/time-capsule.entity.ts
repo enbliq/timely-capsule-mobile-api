@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from "typeorm"
 import { User } from "../../users/entities/user.entity"
-
+//TimeCapsuleEntity
 @Entity()
 export class TimeCapsule {
   @PrimaryGeneratedColumn()
