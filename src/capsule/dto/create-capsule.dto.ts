@@ -1,4 +1,3 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsString,
   IsEmail,
@@ -8,86 +7,54 @@ import {
   IsNotEmpty,
   MaxLength,
   Matches,
-  IsInt,
+  IsInt
 } from 'class-validator';
 
 export class CreateCapsuleDto {
-  @ApiPropertyOptional({
-    description: 'Title of the capsule',
-    type: String,
-  })
   @IsString()
-  title: string;
+  @IsOptional()  // Allow title to be optional
+  title?: string;
 
-  @ApiPropertyOptional({
-    description: 'Content of the capsule',
-    type: String,
-  })
   @IsString()
-  content: string;
+  @IsOptional()  // Allow content to be optional
+  content?: string;
 
-  @ApiPropertyOptional({
-    description: 'Media associated with the capsule',
-    type: String,
-  })
   @IsOptional()
   @IsString()
   media?: string;
 
-  @ApiProperty({
-    description: 'Password for accessing the capsule',
-    type: String,
-    maxLength: 16,
-  })
+
   @IsString()
-  password: string;
+  @MaxLength(16)  // Adjust max length to match the regex
+  @Matches(
+    /^[a-zA-Z0-9]{8,16}$/,  // Accept only letters and numbers (8-16 chars)
+    {
+      message: 'Password must contain only letters and numbers, between 8 to 16 characters.',
+    }
+  )
+  password?: string;
 
-  @ApiPropertyOptional({
-    description: 'Email of the recipient',
-    type: String,
-  })
   @IsEmail()
-  recipientEmail: string;
+  @IsOptional()  // Allow recipientEmail to be optional
+  recipientEmail?: string;
 
-  @ApiPropertyOptional({
-    description: 'Recipient link',
-    type: String,
-  })
   @IsOptional()
   @IsString()
   recipientLink?: string;
 
-  // @IsDate()
-  // unlockAt: Date;
-
-  // @IsDate()
-  // expiresAt: Date;
-
-  @ApiPropertyOptional({
-    description: 'fundId',
-    type: String,
-  })
   @IsOptional()
   @IsString()
   fundId?: string;
 
-  @ApiPropertyOptional({
-    description: 'isClaimed',
-    type: Boolean,
-  })
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   isClaimed?: boolean;
 
-  @ApiPropertyOptional({
-    description: 'isGuest',
-    type: Boolean,
-  })
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   isGuest?: boolean;
 
-  @ApiProperty({ description: 'createdBy', type: String })
-  @IsUUID()
-  createdBy: string;
+  @IsNotEmpty()
+  @IsInt()
+  createdBy?: number;  // Must be a valid UUID string
 }

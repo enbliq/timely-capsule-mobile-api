@@ -18,14 +18,10 @@ export class Capsule {
   @Column()
   title: string;
 
-  @Column({
-    type: 'text',
-  })
+  @Column({ type: 'text' })
   content: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   media: string;
 
   @Column('varchar', { nullable: true })
@@ -34,19 +30,13 @@ export class Capsule {
   @Column()
   recipientEmail: string;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   recipientLink: string;
 
-
-  @CreateDateColumn()
+  @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
   unlockAt: Date;
 
-  @CreateDateColumn({
-    type: 'timestamptz', 
-    default: () => 'CURRENT_TIMESTAMP', 
-
+  @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP' })
   @Column({
     type: 'date',
     default: () => 'CURRENT_TIMESTAMP',
@@ -56,30 +46,20 @@ export class Capsule {
   @Column({
     type: 'date',
     default: () => 'CURRENT_TIMESTAMP',
-
   })
+
   expiresAt: Date;
 
-  @Column({
-    nullable: true,
-  })
+  @Column({ nullable: true })
   fundId: string;
 
   @Column({ default: false })
-  @Column({
-    default: false,
-  })
   isClaimed: boolean;
 
-  @Column({
-    default: false,
-  })
+  @Column({ default: false })
   isGuest: boolean;
 
-  @CreateDateColumn({
-    type: 'date',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn()
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.capsules, {
