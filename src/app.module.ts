@@ -24,6 +24,7 @@ import { MetricsModule } from './metrics/metrics.module';
 import { ContentModule } from './content/content.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
 import { SearchModule } from './search/search.module';
+import { CapsuleHistoryModule } from './capsule-history/capsule-history.module';
 import { PublicCapsuleModule } from './public-capsule/public-capsule.module';
 import { PublicCapsulesController } from './public-capsule/public-capsules.controller';
 import { UserInteractionModule } from './user-interaction/user-interaction.module';
@@ -40,17 +41,6 @@ import { UserInteractionModule } from './user-interaction/user-interaction.modul
       url: process.env.DB_URL,
       synchronize: true,
       autoLoadEntities: true,
-      // useFactory: (configService: ConfigService) => ({
-      //   type: 'postgres', // Add this line
-      //   // host: configService.get('DB_HOST'),
-      //   // port: configService.get('DB_PORT'),
-      //   // username: configService.get('DB_USER'),
-      //   // password: configService.get('DB_PASSWORD'),
-      //   // database: configService.get('DB_NAME'),
-      //   url: configService.get('DB_URL'),
-      //   synchronize: true,
-      //   autoLoadEntities: true,
-      // }),
     }),
     CacheModule.registerAsync<RedisClientOptions>({
       useFactory: async () => ({
@@ -70,6 +60,11 @@ import { UserInteractionModule } from './user-interaction/user-interaction.modul
     PaginationModule,
     AdminModule,
     ActivityLogModule,
+    MetricsModule,
+    ContentModule,
+    RecommendationModule,
+    SearchModule,
+    CapsuleHistoryModule,
     PublicCapsuleModule,
     UserInteractionModule,
     // MetricsModule,
