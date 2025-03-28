@@ -1,15 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { GuestCapsuleAccessLogDto } from './dto/create-guest.dto';
 import { UpdateGuestDto } from './dto/update-guest.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { GuestCapsuleAccessLog } from './entities/guest.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class GuestService {
+  constructor(
+    @InjectRepository(GuestCapsuleAccessLog)
+    private readonly guestCapsuleAccessLogRepository: Repository<GuestCapsuleAccessLog>,
+    private readonly guestCapsuleAccessLog: GuestCapsuleAccessLog,
+  ) {}
   create(createGuestDto: GuestCapsuleAccessLogDto) {
     return 'This action adds a new guest';
   }
 
-  findAll() {
-    return `This action returns all guest`;
+  public async findAll(
+    limit: number,
+    page: number,
+  ): Promise<GuestCapsuleAccessLog[]> {
+    const skip = (page - 1) * limit;
+
+    return this.guestCapsuleAccessLogRepository.find({
+      skip,
+      take: limit,
+    });
   }
 
   findOne(id: number) {

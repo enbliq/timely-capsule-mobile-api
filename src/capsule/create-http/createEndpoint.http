@@ -1,0 +1,17 @@
+
+
+POST http://localhost:3000/capsule
+Content-Type: application/json
+{
+  "title": "testing tile 7",
+  "content": "configured hashing capsule for update.",
+  "media": "http://example.com/media.jpg",
+  "password": "1234pass",
+  "recipientEmail": "hashupdate@gmail.com",
+  "recipientLink": "testhingupdate@gmail.com",
+  "fundId": "some-fund-seventh",
+  "isGuest": true,
+  "createdBy" : 5
+
+
+}

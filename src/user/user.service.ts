@@ -23,13 +23,18 @@ export class UserService {
     return this.userRepository.save(newUser);
   }
 
-  public async findAllUsers(page: number, limit: number) {
+  public async findAllUsers(
+    page: number,
+    limit: number,
+    sortBy?: string,
+    order: 'ASC' | 'DESC' = 'ASC',
+  ) {
     const [users, total] = await this.userRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,
-      order: { id: 'ASC' },
+      order: sortBy ? { [sortBy]: order } : { id: 'ASC' },
     });
-    console.log(limit, page);
+
     return {
       total,
       data: users,

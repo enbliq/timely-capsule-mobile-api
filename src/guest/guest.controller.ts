@@ -6,6 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { GuestService } from './guest.service';
 import { GuestCapsuleAccessLogDto } from './dto/create-guest.dto';
@@ -21,8 +24,11 @@ export class GuestController {
   }
 
   @Get()
-  findAll() {
-    return this.guestService.findAll();
+  public getGuests(
+    @Query('limit', new DefaultValuePipe(20), ParseIntPipe) limit: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+  ) {
+    return this.guestService.findAll(limit, page);
   }
 
   @Get(':id')

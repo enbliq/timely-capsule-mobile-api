@@ -7,12 +7,12 @@ import { SearchResultDto } from '../../dto/search-result.dto/search-result.dto';
 @Injectable()
 export class SearchRepository {
   constructor(
-    @InjectRepository(/* Add your main entity, e.g. Article */)
+    // @InjectRepository(/* Add your main entity, e.g. Article */)
     private readonly repository: Repository<any>,
     private readonly entityManager: EntityManager,
   ) {}
 
-  async search(searchQueryDto: SearchQueryDto): Promise<SearchResultDto<any>> {
+  async search(searchQueryDto: SearchQueryDto): Promise<SearchResultDto> {
     const { 
       query, 
       tags, 
@@ -63,17 +63,17 @@ export class SearchRepository {
     // Apply sorting
     switch (sortBy) {
       case 'popularity':
-        qb.orderBy('entity.viewCount', sortOrder);
+        qb.orderBy('entity.viewCount', sortOrder.toUpperCase() as 'ASC' | 'DESC');
         break;
       case 'date':
-        qb.orderBy('entity.createdAt', sortOrder);
+        qb.orderBy('entity.createdAt', sortOrder.toUpperCase() as 'ASC' | 'DESC');
         break;
       case 'relevance':
       default:
         if (query) {
-          qb.orderBy('rank', sortOrder);
+          qb.orderBy('rank', sortOrder.toUpperCase() as 'ASC' | 'DESC');
         } else {
-          qb.orderBy('entity.createdAt', sortOrder);
+          qb.orderBy('entity.createdAt', sortOrder.toUpperCase() as 'ASC' | 'DESC');
         }
         break;
     }
