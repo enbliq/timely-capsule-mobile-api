@@ -19,6 +19,7 @@ import { MetricsModule } from './metrics/metrics.module';
 import { ContentModule } from './content/content.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
 import { SearchModule } from './search/search.module';
+import { CapsuleHistoryModule } from './capsule-history/capsule-history.module';
 
 @Module({
   imports: [
@@ -32,17 +33,6 @@ import { SearchModule } from './search/search.module';
       url: process.env.DB_URL,
       synchronize: true,
       autoLoadEntities: true,
-      // useFactory: (configService: ConfigService) => ({
-      //   type: 'postgres', // Add this line
-      //   // host: configService.get('DB_HOST'),
-      //   // port: configService.get('DB_PORT'),
-      //   // username: configService.get('DB_USER'),
-      //   // password: configService.get('DB_PASSWORD'),
-      //   // database: configService.get('DB_NAME'),
-      //   url: configService.get('DB_URL'),
-      //   synchronize: true,
-      //   autoLoadEntities: true,
-      // }),
     }),
     UserModule,
     AuthModule,
@@ -56,6 +46,7 @@ import { SearchModule } from './search/search.module';
     ContentModule,
     RecommendationModule,
     SearchModule,
+    CapsuleHistoryModule,
   ],
   controllers: [AppController],
   providers: [
