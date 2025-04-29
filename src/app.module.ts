@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { HealthController } from './src/health.controller';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { HealthController } from './src/health.controller';
         },
       }),
     }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [HealthController],
 })
