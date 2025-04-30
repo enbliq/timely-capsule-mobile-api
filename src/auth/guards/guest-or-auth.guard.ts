@@ -4,7 +4,7 @@ import type { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class GuestOrAuthGuard extends AuthGuard('jwt') {
   constructor(private reflector: Reflector) {
     super();
   }
@@ -19,6 +19,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       return true;
     }
 
-    return super.canActivate(context);
+    // Try to authenticate with JWT
+    return super.canActivate(context).catch(() => {
+      // If authentication fails, create a guest user
+      const request = context.switchToHttp().getRequest();
+
+      // Set a flag to create a guest user in the middleware
+      request.createGuest = true;
+
+      return true;
+    });
   }
 }
