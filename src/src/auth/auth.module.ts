@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common"
 import { PassportModule } from "@nestjs/passport"
 import { JwtModule } from "@nestjs/jwt"
+import { MongooseModule } from "@nestjs/mongoose"
 import { ConfigModule, ConfigService } from "@nestjs/config"
 import { AuthService } from "./auth.service"
 import { AuthController } from "./auth.controller"
@@ -8,6 +9,9 @@ import { UsersModule } from "../users/users.module"
 import { JwtStrategy } from "./strategies/jwt.strategy"
 import { APP_GUARD } from "@nestjs/core"
 import { JwtAuthGuard } from "./guards/jwt-auth.guard"
+import { PasswordRecoveryService } from "./password-recovery.service"
+import { PasswordRecoveryController } from "./password-recovery.controller"
+import { PasswordReset, PasswordResetSchema } from "./schemas/password-reset.schema"
 
 @Module({
   imports: [
@@ -21,16 +25,18 @@ import { JwtAuthGuard } from "./guards/jwt-auth.guard"
         signOptions: { expiresIn: "1d" },
       }),
     }),
+    MongooseModule.forFeature([{ name: PasswordReset.name, schema: PasswordResetSchema }]),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, PasswordRecoveryController],
   providers: [
     AuthService,
     JwtStrategy,
+    PasswordRecoveryService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
   ],
-  exports: [AuthService],
+  exports: [AuthService, PasswordRecoveryService],
 })
 export class AuthModule {}
