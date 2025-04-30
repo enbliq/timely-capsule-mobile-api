@@ -9,6 +9,7 @@ import { UsersModule } from "../users/users.module"
 import { JwtStrategy } from "./strategies/jwt.strategy"
 import { APP_GUARD } from "@nestjs/core"
 import { JwtAuthGuard } from "./guards/jwt-auth.guard"
+import { RolesGuard } from "./guards/roles.guard"
 import { PasswordRecoveryService } from "./password-recovery.service"
 import { PasswordRecoveryController } from "./password-recovery.controller"
 import { PasswordReset, PasswordResetSchema } from "./schemas/password-reset.schema"
@@ -35,6 +36,10 @@ import { PasswordReset, PasswordResetSchema } from "./schemas/password-reset.sch
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
   exports: [AuthService, PasswordRecoveryService],
