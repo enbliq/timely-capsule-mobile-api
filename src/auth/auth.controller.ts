@@ -1,30 +1,49 @@
-import { Controller, Post, Body, Get } from "@nestjs/common"
-import type { AuthService } from "./auth.service"
-import type { LoginDto } from "./dto/login.dto"
-import type { RegisterDto } from "./dto/register.dto"
-import { CurrentUser } from "./decorators/current-user.decorator"
+import { Controller, Post, Body, Get } from '@nestjs/common';
+import type { AuthService } from './auth.service';
+import type { LoginDto } from './dto/login.dto';
+import type { RegisterDto } from './dto/register.dto';
+import type { UpgradeGuestDto } from './dto/upgrade-guest.dto';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { Public } from './decorators/public.decorator';
 
-@Controller("auth")
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Public()
   @Post('login')
-  login(@Body() loginDto: LoginDto) {
+  async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }
 
+  @Public()
   @Post('register')
-  register(@Body() registerDto: RegisterDto) {
+  async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
   }
 
-  @Post("guest")
-  createGuestUser() {
-    return this.authService.createGuestUser()
+  @Public()
+  @Post('guest')
+  async createGuestUser() {
+    return this.authService.createGuestUser();
+  }
+
+  @Post('upgrade-guest')
+  async upgradeGuest(
+    @CurrentUser() user,
+    @Body() upgradeGuestDto: UpgradeGuestDto,
+  ) {
+    return this.authService.upgradeGuestToUser(user.userId, upgradeGuestDto);
   }
 
   @Get('profile')
-  getProfile(@CurrentUser() user) {
+  async getProfile(@CurrentUser() user) {
     return user;
+  }
+
+  @Get('is-guest')
+  async isGuest(@CurrentUser() user) {
+    const isGuest = await this.authService.isGuest(user.userId);
+    return { isGuest };
   }
 }

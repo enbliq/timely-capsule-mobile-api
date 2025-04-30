@@ -1,26 +1,32 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator"
-import type { AuthProvider } from "../schemas/user.schema"
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import type { AuthProvider } from '../schemas/user.schema';
 
 export class CreateUserDto {
   @IsEmail()
   @IsOptional()
-  email?: string
+  email?: string;
 
   @IsString()
   @MinLength(6)
   @IsOptional()
-  password?: string
+  password?: string;
 
   @IsString()
   @IsNotEmpty()
-  displayName: string
+  displayName: string;
 
   @IsOptional()
-  roles?: string[]
+  roles?: string[];
 
   @IsOptional()
-  guest?: boolean
+  guest?: boolean;
 
   @IsOptional()
-  provider?: AuthProvider
+  provider?: AuthProvider;
 }

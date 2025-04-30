@@ -1,5 +1,8 @@
-import { HealthController } from './health.controller';
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  type NestModule,
+  type MiddlewareConsumer,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -8,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { AuditModule } from './audit/audit.module';
 import { AuditInterceptor } from './audit/interceptors/audit.interceptor';
 import { SecurityMiddleware } from './common/middleware/security.middleware';
+import { GuestUserMiddleware } from './auth/middleware/guest-user.middleware';
 
 @Module({
   imports: [
@@ -17,18 +21,27 @@ import { SecurityMiddleware } from './common/middleware/security.middleware';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'),
-        connectionFactory: (connection) => {
-          console.log('Database connected:', connection.name);
-          return connection;
-        },
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
       }),
     }),
     UsersModule,
     AuthModule,
     AuditModule,
   ],
-  controllers: [HealthController],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: AuditInterceptor,
+    },
+  ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(SecurityMiddleware)
+      .forRoutes('*')
+      .apply(GuestUserMiddleware)
+      .forRoutes('*');
+  }
+}
