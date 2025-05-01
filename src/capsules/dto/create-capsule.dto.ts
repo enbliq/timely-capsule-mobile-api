@@ -8,77 +8,77 @@ import {
   IsObject,
   IsOptional,
   IsString,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { ObjectId } from 'mongoose';
-import { CapsuleType } from '../../models/capsule.schema';
+} from "class-validator"
+import { Type } from "class-transformer"
+import type { ObjectId } from "mongoose"
+import type { CapsuleType } from "../../models/capsule.schema"
 
 export class EncryptionDto {
-  @IsEnum(['AES-256-GCM'])
-  algorithm: 'AES-256-GCM';
+  @IsEnum(["AES-256-GCM"])
+  algorithm: "AES-256-GCM"
 
   @IsBoolean()
-  encrypted: boolean;
+  encrypted: boolean
 
   @IsString()
-  iv: string;
+  iv: string
 }
 
 export class CreateCapsuleDto {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title: string
 
   @IsArray()
   @IsString({ each: true })
-  content: string[];
+  content: string[]
 
   @IsDate()
   @Type(() => Date)
-  openAt: Date;
+  openAt: Date
 
   @IsMongoId()
-  ownerId: ObjectId;
+  ownerId: ObjectId
 
   @IsBoolean()
   @IsOptional()
-  isPublic?: boolean;
+  isPublic?: boolean
 
   @IsBoolean()
   @IsOptional()
-  isPasswordProtected?: boolean;
+  isPasswordProtected?: boolean
 
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
-  tags?: string[];
+  tags?: string[]
 
-  @IsEnum(['standard', 'secretDrop', 'lab', 'admin'])
-  capsuleType: CapsuleType;
-
-  @IsArray()
-  @IsMongoId({ each: true })
-  @IsOptional()
-  collaborators?: ObjectId[];
+  @IsEnum(["standard", "secretDrop", "lab", "admin"])
+  capsuleType: CapsuleType
 
   @IsArray()
   @IsMongoId({ each: true })
   @IsOptional()
-  media?: ObjectId[];
+  collaborators?: ObjectId[]
+
+  @IsArray()
+  @IsMongoId({ each: true })
+  @IsOptional()
+  media?: ObjectId[]
 
   @IsMongoId()
   @IsOptional()
-  funds?: ObjectId;
+  funds?: ObjectId
 
   @IsMongoId()
   @IsOptional()
-  geolockId?: ObjectId;
+  geolockId?: ObjectId
 
   @IsObject()
   @IsOptional()
-  encryption?: EncryptionDto;
+  encryption?: EncryptionDto
 
   @IsObject()
   @IsOptional()
-  metadata?: Record<string, any>;
+  metadata?: Record<string, any>
 }
