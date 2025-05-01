@@ -1,26 +1,29 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator"
-import type { AuthProvider } from "../schemas/user.schema"
+import {
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import type { CollaboratorRole, UserRole } from '../../models/user.schema';
 
 export class CreateUserDto {
-  @IsEmail()
-  @IsOptional()
-  email?: string
-
-  @IsString()
-  @MinLength(6)
-  @IsOptional()
-  password?: string
-
   @IsString()
   @IsNotEmpty()
-  displayName: string
+  name: string;
 
-  @IsOptional()
-  roles?: string[]
+  @IsEmail()
+  email: string;
 
+  @IsString()
   @IsOptional()
-  guest?: boolean
+  avatar?: string;
 
+  @IsEnum(['user', 'admin'])
   @IsOptional()
-  provider?: AuthProvider
+  role?: UserRole;
+
+  @IsEnum(['viewer', 'editor', 'co-owner'])
+  @IsOptional()
+  collaboratorRole?: CollaboratorRole;
 }

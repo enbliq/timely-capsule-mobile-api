@@ -1,13 +1,11 @@
-import { HealthController } from './health.controller';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CapsulesModule } from './capsules/capsules.module';
+import { MediaModule } from './media/media.module';
+import { FundsModule } from './funds/funds.module';
+import { GeolocksModule } from './geolocks/geolocks.module';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
-import { AuditModule } from './audit/audit.module';
-import { AuditInterceptor } from './audit/interceptors/audit.interceptor';
-import { SecurityMiddleware } from './common/middleware/security.middleware';
 
 @Module({
   imports: [
@@ -17,18 +15,15 @@ import { SecurityMiddleware } from './common/middleware/security.middleware';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'),
-        connectionFactory: (connection) => {
-          console.log('Database connected:', connection.name);
-          return connection;
-        },
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
       }),
     }),
+    CapsulesModule,
+    MediaModule,
+    FundsModule,
+    GeolocksModule,
     UsersModule,
-    AuthModule,
-    AuditModule,
   ],
-  controllers: [HealthController],
 })
 export class AppModule {}
