@@ -1,22 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import type { Model } from 'mongoose';
-import * as bcrypt from 'bcrypt';
-import type { User, UserDocument } from './schemas/user.schema';
+import { User, type UserDocument } from '../models/user.schema';
 import type { CreateUserDto } from './dto/create-user.dto';
 import type { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name)
+    private userModel: Model<UserDocument>,
+  ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const createdUser = new this.userModel({
-      ...createUserDto,
-      passwordHash: createUserDto.password
-        ? await this.hashPassword(createUserDto.password)
-        : null,
-      lastLoginAt: new Date(),
-    });
+    const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
   }
 
@@ -32,27 +29,21 @@ export class UsersService {
     return user;
   }
 
-  async findByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ email }).exec();
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userModel.findOne({ email }).exec();
+    if (!user) {
+      throw new NotFoundException(`User with email ${email} not found`);
+    }
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
-    const updateData: any = { ...updateUserDto };
-
-    // If password is provided, hash it
-    if (updateUserDto.password) {
-      updateData.passwordHash = await this.hashPassword(updateUserDto.password);
-      delete updateData.password;
-    }
-
     const updatedUser = await this.userModel
-      .findByIdAndUpdate(id, updateData, { new: true })
+      .findByIdAndUpdate(id, updateUserDto, { new: true })
       .exec();
-
     if (!updatedUser) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
-
     return updatedUser;
   }
 
@@ -64,16 +55,13 @@ export class UsersService {
     return deletedUser;
   }
 
-  async updateLastLogin(id: string): Promise<void> {
-    await this.userModel
-      .findByIdAndUpdate(id, {
-        lastLoginAt: new Date(),
-      })
+  async updateCollaboratorRole(id: string, role: string): Promise<User> {
+    const updatedUser = await this.userModel
+      .findByIdAndUpdate(id, { collaboratorRole: role }, { new: true })
       .exec();
-  }
-
-  private async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
-    return bcrypt.hash(password, salt);
+    if (!updatedUser) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    return updatedUser;
   }
 }
