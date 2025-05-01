@@ -10,8 +10,8 @@ import {
   IsString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import type { ObjectId } from 'mongoose';
-import type { CapsuleType } from '../../models/capsule.schema';
+import { ObjectId } from 'mongoose';
+import { CapsuleType } from '../../models/capsule.schema';
 
 export class EncryptionDto {
   @IsEnum(['AES-256-GCM'])
