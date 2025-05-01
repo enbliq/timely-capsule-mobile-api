@@ -1,15 +1,45 @@
-import { NotFoundException, BadRequestException, ForbiddenException } from "@nestjs/common"
-import { isValidObjectId } from "mongoose"
-import type { Capsule } from "../models/capsule.schema"
+import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common"
+import { InjectModel } from "@nestjs/mongoose"
+import { type Model, isValidObjectId } from "mongoose"
+import { Capsule, type CapsuleDocument } from "../models/capsule.schema"
+import type { CreateCapsuleDto } from "./dto/create-capsule.dto"
 import type { UpdateCapsuleDto } from "./dto/update-capsule.dto"
 import { v4 as uuidv4 } from "uuid"
+import type { EncryptionService } from "../encryption/encryption.service"
 
+@Injectable()
 export class CapsulesService {
-  constructor(private capsuleModel: any) {}
+  constructor(
+    @InjectModel(Capsule.name)
+    private capsuleModel: Model<CapsuleDocument>,
+    private encryptionService: EncryptionService,
+  ) {}
 
-  async create(createCapsuleDto: any): Promise<Capsule> {
-    // Generate a unique capsule link
+  async create(createCapsuleDto: CreateCapsuleDto): Promise<Capsule> {
+    // Generate a uniqueique capsule link
     const capsuleLink = uuidv4()
+
+    // Handle encryption metadata if password protected
+    if (createCapsuleDto.isPasswordProtected) {
+      // Ensure encryption metadata is provided
+      if (!createCapsuleDto.encryption) {
+        throw new BadRequestException("Encryption metadata is required for password-protected capsules")
+      }
+
+      // Validate encryption metadata
+      if (!this.encryptionService.validateEncryptionMetadata(createCapsuleDto.encryption)) {
+        throw new BadRequestException("Invalid encryption metadata")
+      }
+
+      // Ensure content is encrypted
+      if (createCapsuleDto.content && createCapsuleDto.content.length > 0) {
+        for (const contentItem of createCapsuleDto.content) {
+          if (!this.encryptionService.isLikelyEncrypted(contentItem)) {
+            throw new BadRequestException("Content must be encrypted for password-protected capsules")
+          }
+        }
+      }
+    }
 
     // Create the capsule
     const createdCapsule = new this.capsuleModel({
@@ -69,9 +99,45 @@ export class CapsulesService {
       throw new NotFoundException(`Capsule with ID ${id} not found`)
     }
 
-    // If the capsule is password protected, don't allow direct content updates
+    // Handle encryption metadata updates
+    if (updateCapsuleDto.isPasswordProtected !== undefined) {
+      // If changing from non-password-protected to password-protected
+      if (updateCapsuleDto.isPasswordProtected && !capsule.isPasswordProtected) {
+        // Ensure encryption metadata is provided
+        if (!updateCapsuleDto.encryption) {
+          throw new BadRequestException("Encryption metadata is required when enabling password protection")
+        }
+
+        // Validate encryption metadata
+        if (!this.encryptionService.validateEncryptionMetadata(updateCapsuleDto.encryption)) {
+          throw new BadRequestException("Invalid encryption metadata")
+        }
+
+        // Ensure content is encrypted or will be updated with encrypted content
+        if (updateCapsuleDto.content) {
+          for (const contentItem of updateCapsuleDto.content) {
+            if (!this.encryptionService.isLikelyEncrypted(contentItem)) {
+              throw new BadRequestException("Content must be encrypted for password-protected capsules")
+            }
+          }
+        } else if (capsule.content && capsule.content.length > 0) {
+          throw new BadRequestException("Existing content must be encrypted when enabling password protection")
+        }
+      }
+
+      // If changing from password-protected to non-password-protected
+      if (!updateCapsuleDto.isPasswordProtected && capsule.isPasswordProtected) {
+        throw new BadRequestException("Cannot remove password protection from a capsule")
+      }
+    }
+
+    // If the capsule is password protected, don't allow direct content updates unless they're encrypted
     if (capsule.isPasswordProtected && updateCapsuleDto.content) {
-      throw new ForbiddenException("Cannot directly update content of password-protected capsules")
+      for (const contentItem of updateCapsuleDto.content) {
+        if (!this.encryptionService.isLikelyEncrypted(contentItem)) {
+          throw new BadRequestException("Content must be encrypted for password-protected capsules")
+        }
+      }
     }
 
     const updatedCapsule = await this.capsuleModel.findByIdAndUpdate(id, updateCapsuleDto, { new: true }).exec()
@@ -182,7 +248,7 @@ export class CapsulesService {
     }
 
     // If the capsule is password protected, ensure content is encrypted
-    if (capsule.isPasswordProtected && !content.startsWith("encrypted:")) {
+    if (capsule.isPasswordProtected && !this.encryptionService.isLikelyEncrypted(content)) {
       throw new BadRequestException("Content must be encrypted for password-protected capsules")
     }
 
