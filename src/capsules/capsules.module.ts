@@ -6,10 +6,7 @@ import { Capsule, CapsuleSchema } from "../models/capsule.schema"
 import { EncryptionModule } from "../encryption/encryption.module"
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Capsule.name, schema: CapsuleSchema }]),
-    EncryptionModule,
-  ],
+  imports: [MongooseModule.forFeature([{ name: Capsule.name, schema: CapsuleSchema }]), EncryptionModule],
   controllers: [CapsulesController],
   providers: [CapsulesService],
   exports: [CapsulesService],
