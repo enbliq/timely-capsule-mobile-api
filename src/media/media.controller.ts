@@ -1,19 +1,17 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import type { MediaService } from './media.service';
-import type { CreateMediaDto } from './dto/create-media.dto';
-import type { UpdateMediaDto } from './dto/update-media.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common"
+import type { MediaService } from "./media.service"
+import type { CreateMediaDto } from "./dto/create-media.dto"
+import type { UpdateMediaDto } from "./dto/update-media.dto"
+import type { PresignedUrlDto } from "./dto/presigned-url.dto"
 
-@Controller('media')
+@Controller("media")
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
+
+  @Get("presign")
+  getPresignedUploadUrl(@Query() presignedUrlDto: PresignedUrlDto) {
+    return this.mediaService.getPresignedUploadUrl(presignedUrlDto);
+  }
 
   @Post()
   create(@Body() createMediaDto: CreateMediaDto) {
@@ -22,21 +20,21 @@ export class MediaController {
 
   @Get()
   findAll() {
-    return this.mediaService.findAll();
+    return this.mediaService.findAll()
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.mediaService.findOne(id);
+  @Get(":id")
+  findOne(@Param("id") id: string) {
+    return this.mediaService.findOne(id)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMediaDto: UpdateMediaDto) {
-    return this.mediaService.update(id, updateMediaDto);
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateMediaDto: UpdateMediaDto) {
+    return this.mediaService.update(id, updateMediaDto)
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.mediaService.remove(id);
+  @Delete(":id")
+  remove(@Param("id") id: string) {
+    return this.mediaService.remove(id)
   }
 }
