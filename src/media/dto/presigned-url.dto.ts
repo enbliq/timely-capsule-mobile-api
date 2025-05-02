@@ -1,13 +1,17 @@
 import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator"
 import type { MediaType } from "../../models/media.schema"
 
-export class CreateMediaDto {
-  @IsEnum(["image", "video", "audio"])
-  type: MediaType
+export class PresignedUrlDto {
+  @IsString()
+  @IsNotEmpty()
+  fileName: string
 
   @IsString()
   @IsNotEmpty()
-  storageUrl: string
+  fileType: string
+
+  @IsEnum(["image", "video", "audio"])
+  mediaType: MediaType
 
   @IsBoolean()
   @IsOptional()

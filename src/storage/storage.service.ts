@@ -3,6 +3,7 @@ import type { ConfigService } from "@nestjs/config"
 import * as AWS from "aws-sdk"
 import * as cloudinary from "cloudinary"
 import { v4 as uuidv4 } from "uuid"
+import type { PresignedUrlResponseDto } from "../media/dto/presigned-url-response.dto"
 
 @Injectable()
 export class StorageService {
@@ -35,11 +36,7 @@ export class StorageService {
     }
   }
 
-  async getPresignedUploadUrl(
-    fileName: string,
-    fileType: string,
-    isEncrypted: boolean,
-  ): Promise<{ uploadUrl: string; storageUrl: string; fields?: Record<string, string>; expiresIn: number }> {
+  async getPresignedUrl(fileName: string, fileType: string, isEncrypted = false): Promise<PresignedUrlResponseDto> {
     if (this.provider === "s3") {
       return this.getS3PresignedUrl(fileName, fileType, isEncrypted)
     } else if (this.provider === "cloudinary") {
@@ -53,7 +50,7 @@ export class StorageService {
     fileName: string,
     fileType: string,
     isEncrypted: boolean,
-  ): Promise<{ uploadUrl: string; storageUrl: string; fields?: Record<string, string>; expiresIn: number }> {
+  ): Promise<PresignedUrlResponseDto> {
     // Generate a unique key for the file
     const fileExtension = fileName.split(".").pop()
     const uniqueId = uuidv4()
@@ -82,7 +79,7 @@ export class StorageService {
     fileName: string,
     fileType: string,
     isEncrypted: boolean,
-  ): Promise<{ uploadUrl: string; storageUrl: string; fields: Record<string, string>; expiresIn: number }> {
+  ): Promise<PresignedUrlResponseDto> {
     // Generate a unique public_id for the file
     const fileExtension = fileName.split(".").pop()
     const uniqueId = uuidv4()
