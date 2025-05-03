@@ -1,23 +1,23 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { type Document, Schema as MongooseSchema } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
+import { type Document, Schema as MongooseSchema } from "mongoose"
 
-export type GeolockDocument = Geolock & Document;
+export type GeolockDocument = Geolock & Document
 
-export type GeolockType = 'country' | 'city' | 'radius';
+export type GeolockType = "country" | "city" | "radius"
 
 @Schema({ timestamps: true })
 export class Geolock {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Capsule', required: true })
-  capsuleId: MongooseSchema.Types.ObjectId;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: "Capsule", required: true })
+  capsuleId: MongooseSchema.Types.ObjectId
 
-  @Prop({ required: true, enum: ['country', 'city', 'radius'] })
-  type: GeolockType;
-
-  @Prop()
-  countryCode: string;
+  @Prop({ required: true, enum: ["country", "city", "radius"] })
+  type: GeolockType
 
   @Prop()
-  cityName: string;
+  countryCode: string
+
+  @Prop()
+  cityName: string
 
   @Prop({
     type: {
@@ -27,13 +27,13 @@ export class Geolock {
     },
   })
   coordinates: {
-    lat: number;
-    lng: number;
-    radiusMeters: number;
-  };
+    lat: number
+    lng: number
+    radiusMeters: number
+  }
 
   @Prop()
-  createdAt: Date;
+  createdAt: Date
 }
 
-export const GeolockSchema = SchemaFactory.createForClass(Geolock);
+export const GeolockSchema = SchemaFactory.createForClass(Geolock)

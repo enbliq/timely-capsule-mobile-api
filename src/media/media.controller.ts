@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common"
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HttpCode, HttpStatus } from "@nestjs/common"
 import type { MediaService } from "./media.service"
 import type { CreateMediaDto } from "./dto/create-media.dto"
 import type { UpdateMediaDto } from "./dto/update-media.dto"
 import type { PresignedUrlDto } from "./dto/presigned-url.dto"
+import type { MediaQueryDto } from "./dto/media-query.dto"
 
 @Controller("media")
 export class MediaController {
@@ -10,17 +11,23 @@ export class MediaController {
 
   @Get("presign")
   getPresignedUploadUrl(@Query() presignedUrlDto: PresignedUrlDto) {
-    return this.mediaService.getPresignedUploadUrl(presignedUrlDto);
+    return this.mediaService.getPresignedUploadUrl(presignedUrlDto)
   }
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createMediaDto: CreateMediaDto) {
-    return this.mediaService.create(createMediaDto);
+    return this.mediaService.create(createMediaDto)
   }
 
   @Get()
-  findAll() {
-    return this.mediaService.findAll()
+  findAll(@Query() query: MediaQueryDto) {
+    return this.mediaService.findAll(query)
+  }
+
+  @Get("capsule/:capsuleId")
+  findByCapsuleId(@Param("capsuleId") capsuleId: string) {
+    return this.mediaService.findByCapsuleId(capsuleId)
   }
 
   @Get(":id")
@@ -34,7 +41,8 @@ export class MediaController {
   }
 
   @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.mediaService.remove(id)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param("id") id: string) {
+    await this.mediaService.remove(id)
   }
 }
