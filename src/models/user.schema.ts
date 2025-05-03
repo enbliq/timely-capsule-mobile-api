@@ -1,30 +1,30 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import type { Document } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose"
+import type { Document } from "mongoose"
 
-export type UserDocument = User & Document;
+export type UserDocument = User & Document
 
-export type UserRole = 'user' | 'admin';
-export type CollaboratorRole = 'viewer' | 'editor' | 'co-owner';
+export type UserRole = "user" | "admin"
+export type CollaboratorRole = "viewer" | "editor" | "co-owner"
 
 @Schema({ timestamps: true })
 export class User {
   @Prop({ required: true })
-  name: string;
+  name: string
 
   @Prop({ required: true, unique: true })
-  email: string;
+  email: string
 
   @Prop()
-  avatar: string;
+  avatar: string
 
-  @Prop({ required: true, enum: ['user', 'admin'], default: 'user' })
-  role: UserRole;
+  @Prop({ required: true, enum: ["user", "admin"], default: "user" })
+  role: UserRole
 
-  @Prop({ enum: ['viewer', 'editor', 'co-owner'] })
-  collaboratorRole: CollaboratorRole;
+  @Prop({ enum: ["viewer", "editor", "co-owner"] })
+  collaboratorRole: CollaboratorRole
 
   @Prop()
-  createdAt: Date;
+  createdAt: Date
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(User)
